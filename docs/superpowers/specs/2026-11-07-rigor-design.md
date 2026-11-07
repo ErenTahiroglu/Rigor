@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Tarih | 2026-11-07 |
-| Durum | ONAYLANDI (2026-11-07) — K24 ile genişletildi |
+| Durum | ONAYLANDI (2026-11-07) — K24–K26 ile genişletildi |
 | Sahip | Eren Tahiroğlu |
 | Kaynaklar | [`../../../Handoff`](../../../Handoff) (önceki oturum, Bölüm 1 bağlayıcı), [`../../research/2026-11-07-arastirma-notlari.md`](../../research/2026-11-07-arastirma-notlari.md) |
 
@@ -78,6 +78,8 @@ reddetmeye dönüşür.
 | K22 | **Lisans: PolyForm Noncommercial 1.0.0**; repo: `github.com/ErenTahiroglu/Rigor`. | Bu oturum |
 | K23 | **İki dal:** `development` = geliştirme, `main` = kararlı son sürüm (§8.4). **Kripto botuyla ilgili kısımlar herkese açık belgelerde anonim**; kimliği belirleyen ayrıntılar git'e girmeyen `docs/private/` altında. | Bu oturum |
 | K24 | **Alandan bağımsızlık:** Rigor yalnızca roket ve finans için değildir; başka biri termodinamik, olasılık, sayılar kuramı veya herhangi bir alanda da kullanabilmelidir. Matematiğin her türünde çalışabilir olmalıdır (§3.4). Roket ve finans sahibin kullanımlarıdır, sistemin sınırı değildir. | Bu oturum |
+| K25 | **İfade ve yapı: "tüm alanları kapsar" denmez; "istediğin alana uyarlanabilir ve o alan için optimize edilebilir" denir ve sistem öyle kurulur.** Termodinamik, akışkanlar mekaniği, eklemeli imalat ve diğer alanlar alan paketleriyle eklenir (§3.4). | Bu oturum |
+| K26 | **Soyut ispatlar v1'de: Lean 4 + Mathlib arka ucu dahil (seçenek B).** | Bu oturum |
 
 ---
 
@@ -91,8 +93,8 @@ reddetmeye dönüşür.
 - G5. Problemi, varsayımları ve sonucu bir lise öğrencisinin anlayacağı sadelikte anlatmak.
 - G6. Finans yazılımlarının (kripto botu, Sentinax) kullandığı formülleri ve ürettiği sayıları bağımsız olarak
   doğrulamak; kodu denetlemeden (Mod B, §5.2, K20, K21).
-- G7. **Alandan bağımsızlık (K24):** Çekirdek hiçbir alana bağlı değildir. Alan bilgisi (fiziksel modeller, veri
-  okuyucular, beklenen davranışlar) yalnızca takılıp çıkarılabilen **alan paketlerinde** bulunur (§3.4).
+- G7. **Alana uyarlanabilirlik (K24, K25):** Çekirdek hiçbir alana bağlı değildir. Kullanıcı Rigor'u kendi alanına
+  bir **alan paketiyle** uyarlar ve o alan için optimize eder (§3.4); Rigor "her alanı bilir" iddiasında bulunmaz.
 
 ### 3.2. Hedef olmayanlar (v1)
 - Hız/düşük gecikme (K2).
@@ -101,8 +103,6 @@ reddetmeye dönüşür.
 - Trading stratejisinin kârlılığı veya piyasa öngörüsü. Mod B yalnızca "formül doğru mu, sayı doğru hesaplanmış mı?"
   sorularını cevaplar.
 - Kod denetimi (K13, K20): Rigor ne uçuş bilgisayarı kodunu ne botun kodunu okur, çalıştırır veya test eder.
-- Soyut teorem ispatının karar verilemeyen kısmı (tümevarım, sonsuz yapılar; Lean 4): kapsamı §11'de açık soru.
-  IR, ileride Lean arka ucu eklenebilecek şekilde tasarlanır.
 - Grafik arayüz. Kanıt raporu Markdown/HTML olarak üretilir, o kadar.
 - Barındırılan (hosted) çok kullanıcılı servis. Yerel çalışır.
 
@@ -110,14 +110,16 @@ reddetmeye dönüşür.
 - A1. **Yanlış bir sonucun "KANITLANDI" etiketiyle dönmesi.** En kötü başarısızlık budur; sistemin tüm eşikleri
   bunu önlemek için muhafazakâr seçilir. Şüphede kalınırsa etiket düşürülür veya reddedilir.
 - A2. Kullanıcıya söylenmemiş herhangi bir varsayım (birim, işaret, başlangıç değeri, yuvarlama modu…).
-- A3. LLM çıktısının `eval()`/`exec()`/`sympy.parse_expr` gibi kod çalıştıran yollarla işlenmesi.
+- A3. LLM çıktısının `eval()`/`exec()`/`sympy.parse_expr` gibi kod çalıştıran yollarla işlenmesi. **Tek istisna
+  (K26):** LLM'in yazdığı Lean ispatları Lean tarafından derlenir; Lean derlemesi metaprogram çalıştırabildiği için
+  bu yalnızca §6.11'deki yalıtılmış ortamda ve yasaklı komut listesiyle yapılır.
 - A4. Sade anlatımda kanıt raporunda olmayan bir sayı, birim veya karşılaştırma ifadesinin bulunması
   (anlatımın kendisinin halüsinasyonu).
 - A5. Jargon dolu, uzman olmayanın anlayamayacağı açıklama.
 - A6. Ajanın, kullanıcıya sorulması gereken eksik bir parametreyi kendi kafasından doldurup bunun
   kullanıcı cevabıymış gibi kaydedilmesi.
 
-### 3.4. Alandan bağımsızlık ve matematik kapsamı (K24)
+### 3.4. Alandan bağımsızlık, alan uyarlaması ve matematik kapsamı (K24, K25)
 
 **Mimari kural (Tasarımcı kararı):** Çekirdek (`rigor.core`: IR, kapılar, Red Team, motorlar, sertifika, anlatım,
 rapor) hiçbir alanın adını, sabitini veya modelini içermez. Alan bilgisi **alan paketlerinde** durur
@@ -126,12 +128,37 @@ adlandırılmış modeller (§4.5), veri okuyucular, beklenen davranış listele
 sözlüğü. Üçüncü kişiler kendi paketlerini aynı arayüzle ekleyebilir; paket modelleri §4.5'teki doğrulamadan geçmeden
 `PROVEN`'ı destekleyemez. Alan paketi olmadan da Rigor çalışır: kullanıcı denklemlerini kendisi verir (seçenek B).
 
+**Alan uyarlaması ve optimizasyonu (K25, Tasarımcı kararı):** Rigor'un dili "her alanı kapsar" değil, "istediğin
+alana uyarlanır ve o alan için optimize edilir"dir. Uyarlama bir alan paketiyle yapılır:
+
+- **Paketin parçaları:** adlandırılmış modeller ve geçerlilik aralıkları; veri okuyucular; birim tanımları; beklenen
+  davranışlar (§6.9); terim sözlüğü (alan terimi ↔ sade anlatım, ayrıştırmaya ipucu); formülatörler için çözülmüş
+  örnekler; alanın kendi altın test seti; isteğe bağlı dış araç karşılaştırması (roket için OpenRocket gibi).
+- **Araçlar:** `rigor domain new <ad>` (iskelet), `rigor domain verify <ad>` (modellerin §4.5 doğrulaması + paketin
+  altın seti), `rigor domain bench <ad>` (ölçüm). Ölçümler: yanlış `PROVEN` sayısı (**0 olmak zorunda**), gereksiz soru
+  oranı, çözülebilen problem oranı, ortalama Red Team ayrışma sayısı.
+- **Neyi optimize eder:** ayrıştırma isabeti ve soru sayısı (sözlük, örnekler), kapsanan problem oranı (modeller,
+  okuyucular), anlatımın alana uygunluğu (sözlük). Ölçüm (`bench`) önce/sonra karşılaştırılır.
+- **Neyi optimize edemez (güvenlik tabanı):** Bir paket oybirliği kuralını, K değerini, gereken model ailesi sayısını,
+  sertifika şartlarını, etiket kurallarını ve fail-closed davranışını **gevşetemez**; yalnızca sıkılaştırabilir
+  (ör. kendi alanında `K=5`). Gevşetme girişimi paket yüklenirken reddedilir.
+- **Olgunluk:** `deneysel` paketin modelleri en fazla `CROSS_VALIDATED`'i destekler; `verify` ve `bench` geçen
+  (yanlış `PROVEN` = 0, model doğrulamaları tam) paket `doğrulanmış` olur ve `PROVEN`'ı destekler. Olgunluk raporda yazar.
+- **Öğrenme bağlantısı:** §6.9.1 hakem kararlarından çıkan kurallar (yeni testler, istisnalar) ilgili paketin
+  beklenen davranışlarına ve altın setine **öneri** olarak gelir; kullanıcı onaylarsa pakete girer.
+- **v1'de gelen paketler (Tasarımcı kararı):** `rocket` ve `finance` (sahibin kullanımları, tam). Uyarlama yolunun
+  gerçekten çalıştığını göstermek için küçük bir örnek paket: `fluids` (Bernoulli, süreklilik, Darcy–Weisbach,
+  Colebrook örtük denklemi Arb ile kök bulma, Reynolds sayısı). Termodinamik (CoolProp ile), eklemeli imalat (katman
+  sayısı/süresi, malzeme hacmi, maliyet, ısıl genleşme) ve diğerleri aynı yolla eklenir; v1 belgelerinde
+  "nasıl paket yazılır" rehberi bunları örnek alır.
+
 **Bağımsızlık testi:** Çekirdeğin testleri hiçbir alan paketini yüklemeden geçmelidir; altın test seti (§9) roket ve
 finans dışı alanlardan da örnek içerir (termodinamik, olasılık, doğrusal cebir, sayılar kuramı, geometri,
 kombinatorik, optimizasyon, mantık).
 
-**Matematik kapsam matrisi:** "Matematiğin her türü" tek bir motorla mümkün değildir. Rigor her türü uygun motora
-yönlendirir; desteklemediği bir türü çözmeye çalışmaz, `REFUSED (UNSUPPORTED_MATH)` döner ve nedenini söyler.
+**Matematik kapsam matrisi:** Tek bir motor her matematik türünü çözemez. Rigor problemi yapısına göre uygun motora
+yönlendirir; desteklemediği bir yapıyı çözmeye çalışmaz, `REFUSED (UNSUPPORTED_MATH)` döner ve nedenini söyler.
+Aşağıdaki tablo v1'in desteklediği yapılardır; yeni yapılar yeni motor arka uçlarıyla eklenir.
 
 | Tür | Örnek | Yol | En yüksek etiket |
 |---|---|---|---|
@@ -151,12 +178,12 @@ yönlendirir; desteklemediği bir türü çözmeye çalışmaz, `REFUSED (UNSUPP
 | Optimizasyon (LP/MILP/konveks) | kaynak dağıtımı | HiGHS / CVXPY + dual sertifika / KKT | PROVEN / CROSS_VALIDATED |
 | Geometri, trigonometri | alan, açı, dönüşüm | SymPy cebirsel özdeşlik; Arb | PROVEN |
 | Diziler, özyineleme | faiz, Fibonacci | SymPy `rsolve` + kesin değerlendirme | PROVEN |
-| Termodinamik ve diğer fizik | çevrim verimi, buhar tabloları | Çekirdek denklemler + alan paketi (ör. özellik tabloları için CoolProp, MIT lisanslı, IAPWS-95 dahil; tablo verisi §6.2 `Table`) | PROVEN (modele göre) / CROSS_VALIDATED |
-| Soyut ispat (tümevarım, sonsuz yapılar) | "her n için …" | Karar verilebilir parçası Z3/SymPy ile; geri kalanı: §11 açık soru | §11 |
+| Mühendislik alanları (termodinamik, akışkanlar, imalat…) | çevrim verimi, boru kaybı, katman süresi | Çekirdek denklemler + ilgili alan paketi (ör. özellik tabloları için CoolProp, MIT; tablo verisi §6.2 `Table`) | PROVEN (modele göre) / CROSS_VALIDATED |
+| Soyut ispat (tümevarım, sonsuz yapılar) | "her n için …", "sonsuz sayıda asal vardır" | Karar verilebilir parçası Z3/SymPy; geri kalanı Lean 4 + Mathlib (§6.11, K26) | PROVEN (Lean çekirdeği kontrol ettiyse) |
 
 Kapsam matrisi bir alt sınırdır: yönlendirici (§6.5) IR'ın yapısına bakar, alanına bakmaz. Termodinamik problemi
 alan paketi olmadan da çözülebilir, yeter ki gerekli denklemler ve veriler problemde verilmiş ya da kullanıcı
-tarafından sağlanmış olsun.
+tarafından sağlanmış olsun; alan paketi bu işi daha az soruyla ve hazır doğrulanmış modellerle yapar.
 
 ---
 
@@ -168,7 +195,7 @@ tarafından sağlanmış olsun.
 |---|---|---|
 | **KANITLANDI** (`PROVEN`) | Sonuç, onaylı tanıma göre formal olarak doğru. | (a) Formal tanım kullanıcı tarafından onaylandı; (b) formülasyon konsensüsü **oybirliği** ile ve **≥2 farklı model ailesinden** geldi; (c) çözüm için makinece kontrol edilebilir bir sertifika var (kesin aritmetikle geri ikame, `unsat` ispatı, rasyonel aritmetikle doğrulanmış LP dual sertifikası, Arb top aritmetiğiyle hata sınırı vb.). |
 | **ÇAPRAZ DOĞRULANDI** (`CROSS_VALIDATED`) | Sonuç güçlü biçimde destekleniyor ama formal sertifika yok ya da formülasyon bağımsızlığı zayıf. | (a) Formal tanım onaylandı; (b) oybirliği konsensüsü var; (c) en az iki bağımsız yöntem aynı sonucu verdi ve sınır testleri geçti. Örnekler: ODE ile yörünge, tek model ailesinden gelen formülasyon, Mod B2'de bootstrap tabanlı istatistikler. |
-| **REDDEDİLDİ** (`REFUSED`) | Sonuç verilmedi. | Neden kodu (ör. `UNDERDETERMINED`, `INCONSISTENT`, `DIMENSION_MISMATCH`, `NO_CONSENSUS`, `SOLVER_UNKNOWN`, `CERTIFICATE_FAILED`, `USER_REJECTED_SPEC`, `TEMPLATE_SELF_CHECK_FAILED`, `UNSUPPORTED_MATH`) + sade dille açıklama + kullanıcıdan ne gerektiği. |
+| **REDDEDİLDİ** (`REFUSED`) | Sonuç verilmedi. | Neden kodu (ör. `UNDERDETERMINED`, `INCONSISTENT`, `DIMENSION_MISMATCH`, `NO_CONSENSUS`, `SOLVER_UNKNOWN`, `CERTIFICATE_FAILED`, `USER_REJECTED_SPEC`, `TEMPLATE_SELF_CHECK_FAILED`, `UNSUPPORTED_MATH`, `PROOF_NOT_FOUND`, `LEAN_FORBIDDEN_CONSTRUCT`) + sade dille açıklama + kullanıcıdan ne gerektiği. |
 
 Etiketin altındaki her şart raporda ayrı ayrı "geçti/geçmedi" olarak listelenir; böylece kullanıcı güvenin neye
 dayandığını görür.
@@ -507,6 +534,7 @@ Yönlendirici, IR'ın yapısına bakarak (doğal dile değil) motoru seçer:
 | Kesin olasılık, kombinatorik | Rational sayım / SymPy stats | Küçük uzayda kaba kuvvet sayımı veya bağımsız kapalı form |
 | Sayılar kuramı, modüler | python-flint | Z3 tamsayı / bit-vektör |
 | PDE | SymPy kapalı form | Çizgiler yöntemi + iki farklı ağ çözünürlüğünde yakınsama (sertifikasız → CROSS_VALIDATED) |
+| Soyut ispat (karar verilemeyen) | Lean 4 + Mathlib (§6.11) | Yok; Lean çekirdeği tek başına sertifikadır. İfade denkliği Lean'de `↔` ispatıyla |
 | Desteklenmeyen tür | — | `REFUSED (UNSUPPORTED_MATH)`; hangi türün neden desteklenmediği söylenir |
 
 Bilinen Z3 tuzakları (Handoff §2.3): `Optimize` `assert_and_track`'i desteklemez → önce `Solver` ile tutarlılık,
@@ -529,6 +557,7 @@ kullanan dış araçlarla (RocketPy, OpenRocket) karşılaştırma yalnızca rap
   bu yüzden sayısal çözüm içeren sonuçlar en fazla `CROSS_VALIDATED` olur ve raporda tolerans, adım sayıları ve
   yakınsama tablosu yer alır. **Kapalı form** çözümü olan ODE/PDE'lerde çözüm denkleme ve başlangıç/sınır
   koşullarına sembolik olarak geri konur; sıfır fark kanıtlanırsa `PROVEN` mümkündür (§3.4).
+- Soyut ispatlarda sertifika, Lean çekirdeğinin kabul ettiği ispat + aksiyom listesi + bağımsız yeniden kontroldür (§6.11).
 
 ### 6.7. Sade anlatım (K7)
 
@@ -678,6 +707,44 @@ geçmiş kullanımlarına deterministik olarak uygular:
 - Kapalı formlu, aynı modelin kullanıldığı büyüklüklerde (ör. kütle toplamı, CG) fark bir model farkı olamaz; burada
   fark varsa bu bir **girdi veya hesap hatası işareti** olarak ayrıca vurgulanır.
 
+### 6.11. Lean 4 ispat arka ucu (K26)
+
+**Akış:**
+1. **İfade (statement) formülasyonu = Tip-2 riski:** Lean, ispatın ifadeye uyduğunu kanıtlar; ifadenin senin
+   kastettiğin şey olduğunu kanıtlamaz. Bu yüzden ifade de §6.4 Red Team'den geçer: K formülatör ifadeyi bağımsız
+   olarak Lean'e yazar. **İfade denkliği:** her aday çifti için `ifade₁ ↔ ifade₂` teoremi Lean'de ispatlanmaya
+   çalışılır (LLM ispatı yazar, Lean kontrol eder). Denklik ispatlanamazsa ayrışma sayılır ve sade dille soru olur.
+   Roundtrip (§6.4 adım 5) burada da uygulanır: onaylanacak ifade, problemi görmeyen bir formülatöre doğal dile
+   geri çevirtilir. Onay anlatımı ifadenin okunur halini gösterir; onay `USER_DIRECT` olmalıdır (§4.3). Lean yolu
+   tipli IR yerine Lean ifadesi kullanır; birim kapısı uygulanmaz, ama problemde birimli büyüklük varsa bu yol
+   seçilmez (fiziksel problemler IR yolundan gider).
+2. **İfade dondurulur:** Onaylanan ifade ayrı bir dosyaya yazılır, elaborasyon sonrası türünün özeti (hash)
+   kaydedilir. İspat dosyası bu ifadeyi içe aktarır ve ispatlanan teoremin türü kayıtlı özetle **birebir** aynı
+   olmalıdır; ispat sırasında ifadeyi değiştirme (zayıflatma, notasyonu yeniden tanımlama) böylece yakalanır.
+3. **İspat arama:** LLM'ler ispatı yazar; Lean hata mesajları geri beslenir; K2 gereği bütçe yapılandırılabilir ama
+   sonsuz değildir. Bulunamazsa `REFUSED (PROOF_NOT_FOUND)`. Bu, zor teoremlerde sık olacaktır ve dürüst sonuçtur.
+4. **Kontrol (sertifika):** Lean çekirdeği ispatı kontrol eder; ardından `#print axioms` ile yalnızca standart
+   aksiyomlar (`propext`, `Classical.choice`, `Quot.sound`) kullanıldığı doğrulanır ve ispat bağımsız bir çekirdek
+   denetleyicisiyle (ör. `lean4checker`) yeniden kontrol edilir.
+5. Geçerse sonuç `PROVEN`; raporda ifade, ispat, Lean/Mathlib sürümleri ve aksiyom listesi yer alır.
+6. **Yeniden üretim:** Mathlib sürümleri değiştikçe eski ispatlar derlenmeyebilir. `rigor replay` ispatı raporda
+   kayıtlı araç zinciri ve Mathlib sürümüyle yeniden kontrol eder; o sürüm yoksa "yeniden kontrol edilemedi" der.
+   Bir Lean şablonunun öz-denetimi (§6.9) bu yeniden kontrolü içerir.
+
+**Yasaklı yapılar (statik tarama, ihlal → `REFUSED (LEAN_FORBIDDEN_CONSTRUCT)`):** `sorry`, `admit`, yeni `axiom`,
+`unsafe`, `implemented_by`, `@[extern]`, `native_decide` ve `Lean.ofReduceBool`'a dayanan her şey, `#eval`, `run_cmd`,
+`elab`/`macro`/`syntax`/`notation` tanımları, `set_option` ile çekirdek/elaborator sınırlarını değiştirme, `IO`.
+
+**Yalıtım (A3 istisnası):** Lean derlemesi metaprogram çalıştırabilir. Bu yüzden her derleme ayrı bir süreçte, ağ
+erişimi olmadan, geçici bir dizinde, salt-okunur Mathlib ile, zaman/bellek sınırıyla çalışır. **Tasarımcı kararı:**
+macOS'ta ve Linux'ta kullanılabilen bir konteyner/sandbox yöntemi uygulayıcı tarafından seçilir ve `rigor doctor`
+yalıtımın gerçekten çalıştığını test eder; doğrulanamazsa Lean arka ucu devre dışı kalır (fail-closed).
+
+**Kurulum:** opsiyonel ekstra (`rigor[lean]`); `elan` ile sabitlenmiş Lean araç zinciri ve sürümü sabitlenmiş Mathlib
+(önbellek birkaç GB). Lean ile etkileşim için hazır bir REPL arayüzü (ör. `leanprover-community/repl`) kullanılabilir;
+seçim ve güncel sürümler uygulayıcıya bırakılmıştır. Lean kurulu değilse soyut ispatlar `REFUSED (UNSUPPORTED_MATH)`
+döner ve neyin kurulması gerektiği söylenir.
+
 ---
 
 ## 7. Arayüzler (K3)
@@ -792,7 +859,7 @@ güvenilmez kabul edilir**; bağımsızlık ve model kimliği her yanıtta Rigor
 - **Çekirdek bağımlılıklar (2026-11 PyPI sürümleri):** pydantic 2.14, sympy 1.14, z3-solver 5.3, pint 0.26,
   python-flint 0.9, mpmath 1.4, networkx 3.7, highspy 1.15, cvxpy 1.9, scipy, mcp 2.3, openpyxl, defusedxml,
   hypothesis 6.170 (öz-denetim ve beklenen davranış testleri).
-- **Opsiyonel:** rocketpy 1.13 (roket karşılaştırması),
+- **Opsiyonel:** Lean 4 araç zinciri + Mathlib (`rigor[lean]`, §6.11), CoolProp (termodinamik paketi), rocketpy 1.13 (roket karşılaştırması),
   dreal 4.21 (sistem kütüphaneleri ister; opsiyonel), jacobian 0.23 (değerlendirilecek, aşağıya bakın).
 - **Bağımlılık lisansları (Tasarımcı kararı, K22 ile uyum):** Çekirdek ve alan paketleri yalnızca izin verici
   lisanslı (MIT, BSD, Apache-2.0, PSF, MPL-2.0) veya dinamik bağlanan LGPL (ör. python-flint içindeki FLINT)
@@ -858,6 +925,9 @@ roket hesapları son aşamayı beklemeden başlayabilir.
 3. **Red Team + doğal dil:** ayrıştırma, CLI/Groq formülatör adaptörleri, hizalama, denklik, roundtrip, mutasyon,
    sade anlatım + koruma, tam MCP. Kullanılabilir: doğal dilden problem, `PROVEN`.
 4. **Şablon + öz-denetim + hakem:** §6.9, §6.9.1.
+4b. **Lean 4 arka ucu:** §6.11 (yalıtım, yasaklı yapılar, ifade dondurma, ispat arama). Red Team katmanına bağlı
+   olduğu için 3. aşamadan sonra gelir.
+4c. **Alan uyarlama araçları:** `rigor domain new/verify/bench`, `fluids` örnek paketi, paket yazma rehberi (§3.4).
 5. **Mod B (finans):** B1 formül denetimi, B2 mutabakat (§5.2); kripto botu ve Sentinax (canlıya alma özeti).
 6. **Sağlamlaştırma:** altın test setinin tamamı, gerçek dosyalarla yerel kabul testi.
 
@@ -879,16 +949,9 @@ ulaşılabilir bir etikettir (§4.1).
 Hedef → K16; OpenRocket → K17; şablon + öz-denetim → K18; hakem + öğrenme → K19; kripto botu → K20;
 Mod B kapsamı + Sentinax → K21; lisans → K22; dallar ve anonimlik → K23.
 
-Alandan bağımsızlık → K24.
+Alandan bağımsızlık → K24; alan uyarlaması ifadesi ve yapısı → K25; Lean 4 → K26.
 
-Açık soru (K24'ten doğdu):
-
-1. **Soyut ispatlar kapsamda mı?** "Her n doğal sayısı için …", "sonsuz sayıda asal vardır" türü, tümevarım veya
-   sonsuz yapı gerektiren ispatlar SMT/CAS ile genelde karar verilemez. Seçenekler: (a) v1'de yalnızca karar
-   verilebilir kısmı (polinom eşitsizlikleri, sonlu alanlar, doğrusal aritmetik; Z3/SymPy), geri kalanı
-   `REFUSED (UNSUPPORTED_MATH)`; Lean 4 arka ucu sonraki sürüm. (b) Lean 4 + Mathlib arka ucu v1'e dahil (LLM ispatı
-   Lean'de yazar, Lean çekirdeği kontrol eder → `PROVEN`); büyük bir ek iş ve kurulum (Lean araç zinciri, Mathlib
-   ~birkaç GB). Öneri: (a).
+Açık soru kalmadı.
 
 (Botla ilgili ertelenen bir nokta `docs/private/` altında; bot hazır olunca ele alınır.)
 

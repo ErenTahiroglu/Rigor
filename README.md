@@ -26,7 +26,7 @@ sıfırlayan bir yöntem yok. Rigor bu yüzden "her zaman doğru" demez, **ne ka
 
 | Etiket | Anlamı |
 |---|---|
-| **KANITLANDI** | Tanımı sen onayladın, en az 2 farklı model ailesi aynı formülasyonda oybirliği yaptı, sonucu makinece kontrol edilebilir bir kanıt destekliyor. |
+| **KANITLANDI** | Tanımı sen onayladın, en az 2 farklı model ailesi aynı formülasyonda oybirliği yaptı, sonucu makinece kontrol edilebilir bir kanıt destekliyor (kesin aritmetik, SMT ispatı ya da Lean 4 çekirdeği). |
 | **ÇAPRAZ DOĞRULANDI** | Güçlü destek var ama formal kanıt yok (ör. diferansiyel denklem simülasyonu). |
 | **REDDEDİLDİ** | Eksik bilgi, çelişki, birim hatası ya da modeller anlaşamadı. Ne gerektiği söylenir. |
 
@@ -57,10 +57,15 @@ yeniden üretilebilir bir **kanıt raporu** gelir.
 
 ## Ne için?
 
-Rigor **alandan bağımsızdır**: cebir, kalkülüs, diferansiyel denklemler, doğrusal cebir, olasılık ve istatistik,
-sayılar kuramı, kombinatorik, mantık, optimizasyon, geometri; fizik ve mühendislikte termodinamikten akışkanlara
-kadar. Çekirdek hiçbir alanı bilmez; alan bilgisi (fiziksel modeller, veri okuyucular) takılıp çıkarılabilen alan
-paketlerinde durur. Desteklenmeyen bir matematik türünde tahmin yürütmez, bunu açıkça söyler.
+Rigor'un çekirdeği hiçbir alanı bilmez; **istediğin alana uyarlanır ve o alan için optimize edilir.** Uyarlama bir
+**alan paketiyle** yapılır: alanın modelleri, veri okuyucuları, birimleri, terim sözlüğü, beklenen davranışları ve
+kendi test seti. `rigor domain new / verify / bench` ile paket kurulur, doğrulanır ve ölçülür. Optimizasyon soru
+sayısını ve kapsamı iyileştirir; güvenlik kurallarını (oybirliği, kanıt şartları) hiçbir paket gevşetemez.
+
+Çekirdeğin desteklediği matematik: cebir, eşitsizlikler, kalkülüs, diferansiyel denklemler, doğrusal cebir, olasılık
+ve istatistik, sayılar kuramı, kombinatorik, mantık, optimizasyon, geometri ve **Lean 4** ile soyut ispatlar.
+Desteklemediği bir yapıda tahmin yürütmez, bunu açıkça söyler. Termodinamik, akışkanlar mekaniği, eklemeli imalat
+gibi alanlar alan paketiyle eklenir; v1 `rocket`, `finance` ve örnek olarak `fluids` paketiyle gelir.
 
 Sahibinin kendi kullanımları:
 
@@ -100,7 +105,7 @@ MCP üzerinden: `rigor_solve`, `rigor_answer`, `rigor_confirm`, `rigor_report`, 
 1. Çekirdek: tipli IR, birim ve tanım kapıları, kesin motorlar, kanıt, rapor, ince MCP
 2. Roket fiziği: model kütüphanesi, `.eng`/xlsx/CSV/`.ork` okuyucular, uçuş simülasyonu, OpenRocket karşılaştırması
 3. Red Team ve doğal dil: bağımsız formülasyon, denklik, sade anlatım, tam MCP
-4. Şablonlar, öz-denetim ve hakem süreci
+4. Şablonlar, öz-denetim ve hakem süreci; Lean 4 ispat arka ucu; alan uyarlama araçları
 5. Finans: formül denetimi ve bağımsız yeniden hesap
 6. Sağlamlaştırma: altın test seti, gerçek dosyalarla kabul testi
 
