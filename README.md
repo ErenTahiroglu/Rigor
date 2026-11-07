@@ -57,6 +57,13 @@ yeniden üretilebilir bir **kanıt raporu** gelir.
 
 ## Ne için?
 
+Rigor **alandan bağımsızdır**: cebir, kalkülüs, diferansiyel denklemler, doğrusal cebir, olasılık ve istatistik,
+sayılar kuramı, kombinatorik, mantık, optimizasyon, geometri; fizik ve mühendislikte termodinamikten akışkanlara
+kadar. Çekirdek hiçbir alanı bilmez; alan bilgisi (fiziksel modeller, veri okuyucular) takılıp çıkarılabilen alan
+paketlerinde durur. Desteklenmeyen bir matematik türünde tahmin yürütmez, bunu açıkça söyler.
+
+Sahibinin kendi kullanımları:
+
 - **Roket:** TEKNOFEST Roket Yarışması (A2 Orta İrtifa) hesapları: kütle bütçesi, statik marjin, motor itkisi,
   rampadan çıkış hızı, tepe irtifası, paraşüt iniş hızları, eksen dönüşümleri, haberleşme paketi. Sonuçlar
   **OpenRocket** ile karşılaştırılabilir.

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Tarih | 2026-11-07 |
-| Durum | TASLAK — sahibin onayını bekliyor |
+| Durum | ONAYLANDI (2026-11-07) — K24 ile genişletildi |
 | Sahip | Eren Tahiroğlu |
 | Kaynaklar | [`../../../Handoff`](../../../Handoff) (önceki oturum, Bölüm 1 bağlayıcı), [`../../research/2026-11-07-arastirma-notlari.md`](../../research/2026-11-07-arastirma-notlari.md) |
 
@@ -77,6 +77,7 @@ reddetmeye dönüşür.
 | K21 | **Mod B kapsamı: B1 (formül denetimi) + B2 (bağımsız yeniden hesap) ikisi birden**, iki finans yazılımı için: kripto botu ve [Sentinax](https://github.com/ErenTahiroglu/Sentinax) (yatırım karar destek web sitesi). Sentinax için amaç: **canlıya almadan önce** matematiksel doğruluk kontrolü. | Bu oturum |
 | K22 | **Lisans: PolyForm Noncommercial 1.0.0**; repo: `github.com/ErenTahiroglu/Rigor`. | Bu oturum |
 | K23 | **İki dal:** `development` = geliştirme, `main` = kararlı son sürüm (§8.4). **Kripto botuyla ilgili kısımlar herkese açık belgelerde anonim**; kimliği belirleyen ayrıntılar git'e girmeyen `docs/private/` altında. | Bu oturum |
+| K24 | **Alandan bağımsızlık:** Rigor yalnızca roket ve finans için değildir; başka biri termodinamik, olasılık, sayılar kuramı veya herhangi bir alanda da kullanabilmelidir. Matematiğin her türünde çalışabilir olmalıdır (§3.4). Roket ve finans sahibin kullanımlarıdır, sistemin sınırı değildir. | Bu oturum |
 
 ---
 
@@ -88,7 +89,10 @@ reddetmeye dönüşür.
 - G3. Eksik, çelişkili veya boyutsal olarak tutarsız problemleri **çözücüye gitmeden** tespit etmek ve kullanıcıya sormak.
 - G4. Her sonuca, neyin neden doğru olduğunu gösteren, yeniden üretilebilir bir kanıt raporu eklemek.
 - G5. Problemi, varsayımları ve sonucu bir lise öğrencisinin anlayacağı sadelikte anlatmak.
-- G6. Kripto botunun kullandığı formülleri ve ürettiği sayıları bağımsız olarak doğrulamak; kodu denetlemeden (Mod B, §5.2, K20).
+- G6. Finans yazılımlarının (kripto botu, Sentinax) kullandığı formülleri ve ürettiği sayıları bağımsız olarak
+  doğrulamak; kodu denetlemeden (Mod B, §5.2, K20, K21).
+- G7. **Alandan bağımsızlık (K24):** Çekirdek hiçbir alana bağlı değildir. Alan bilgisi (fiziksel modeller, veri
+  okuyucular, beklenen davranışlar) yalnızca takılıp çıkarılabilen **alan paketlerinde** bulunur (§3.4).
 
 ### 3.2. Hedef olmayanlar (v1)
 - Hız/düşük gecikme (K2).
@@ -97,7 +101,8 @@ reddetmeye dönüşür.
 - Trading stratejisinin kârlılığı veya piyasa öngörüsü. Mod B yalnızca "formül doğru mu, sayı doğru hesaplanmış mı?"
   sorularını cevaplar.
 - Kod denetimi (K13, K20): Rigor ne uçuş bilgisayarı kodunu ne botun kodunu okur, çalıştırır veya test eder.
-- Soyut teorem ispatı (Lean 4) v1'de yok; IR, ileride Lean arka ucu eklenebilecek şekilde tasarlanır.
+- Soyut teorem ispatının karar verilemeyen kısmı (tümevarım, sonsuz yapılar; Lean 4): kapsamı §11'de açık soru.
+  IR, ileride Lean arka ucu eklenebilecek şekilde tasarlanır.
 - Grafik arayüz. Kanıt raporu Markdown/HTML olarak üretilir, o kadar.
 - Barındırılan (hosted) çok kullanıcılı servis. Yerel çalışır.
 
@@ -112,6 +117,47 @@ reddetmeye dönüşür.
 - A6. Ajanın, kullanıcıya sorulması gereken eksik bir parametreyi kendi kafasından doldurup bunun
   kullanıcı cevabıymış gibi kaydedilmesi.
 
+### 3.4. Alandan bağımsızlık ve matematik kapsamı (K24)
+
+**Mimari kural (Tasarımcı kararı):** Çekirdek (`rigor.core`: IR, kapılar, Red Team, motorlar, sertifika, anlatım,
+rapor) hiçbir alanın adını, sabitini veya modelini içermez. Alan bilgisi **alan paketlerinde** durur
+(`rigor.domains.rocket`, `rigor.domains.finance`, `rigor.domains.thermo`…). Bir alan paketi şunları verebilir:
+adlandırılmış modeller (§4.5), veri okuyucular, beklenen davranış listeleri (§6.9), birim tanımları, sade anlatım
+sözlüğü. Üçüncü kişiler kendi paketlerini aynı arayüzle ekleyebilir; paket modelleri §4.5'teki doğrulamadan geçmeden
+`PROVEN`'ı destekleyemez. Alan paketi olmadan da Rigor çalışır: kullanıcı denklemlerini kendisi verir (seçenek B).
+
+**Bağımsızlık testi:** Çekirdeğin testleri hiçbir alan paketini yüklemeden geçmelidir; altın test seti (§9) roket ve
+finans dışı alanlardan da örnek içerir (termodinamik, olasılık, doğrusal cebir, sayılar kuramı, geometri,
+kombinatorik, optimizasyon, mantık).
+
+**Matematik kapsam matrisi:** "Matematiğin her türü" tek bir motorla mümkün değildir. Rigor her türü uygun motora
+yönlendirir; desteklemediği bir türü çözmeye çalışmaz, `REFUSED (UNSUPPORTED_MATH)` döner ve nedenini söyler.
+
+| Tür | Örnek | Yol | En yüksek etiket |
+|---|---|---|---|
+| Aritmetik, kesirler, birim dönüşümü | ücret, oran, ft↔m | Rational / Decimal / pint | PROVEN |
+| Cebir, denklem sistemleri, polinomlar | kök, çarpanlara ayırma | SymPy + Arb kök izolasyonu | PROVEN |
+| Eşitsizlikler (polinom, reel) | "her x>0 için …" | Z3 doğrusal olmayan reel aritmetik (karar verilebilir), dReal | PROVEN |
+| Kalkülüs: türev, integral, limit, seri | belirli integral | SymPy sembolik + Arb kesin hata sınırlı integral | PROVEN |
+| Diferansiyel denklemler (ODE) | yörünge, soğuma | SymPy kapalı form varsa PROVEN; yoksa `solve_ivp` ×2 + yakınsama | PROVEN / CROSS_VALIDATED |
+| Kısmi diferansiyel denklemler (PDE) | ısı iletimi | Kapalı form (SymPy) veya çizgiler yöntemiyle ODE'ye indirgeme + ağ yakınsama testi | PROVEN / CROSS_VALIDATED |
+| Doğrusal cebir | özdeğer, ters matris, determinant | python-flint kesin rasyonel matrisler; Arb aralık matrisleri | PROVEN |
+| Karmaşık sayılar, özel fonksiyonlar | Gamma, Bessel, erf | Arb (`acb`) | PROVEN |
+| Olasılık (kesin) | zar, dağılım, beklenen değer | SymPy stats / Rational, sonlu uzayda sayım | PROVEN |
+| İstatistik, Monte Carlo | güven aralığı, bootstrap | Formül PROVEN; örnekleme sonucu en fazla CROSS_VALIDATED (§5.3) | PROVEN / CROSS_VALIDATED |
+| Sayılar kuramı, modüler aritmetik | asallık, mod, EBOB | python-flint, Z3 tamsayı/bit-vektör | PROVEN |
+| Kombinatorik, sonlu sayım | permütasyon, graf sayımı | Kesin sayım + bağımsız kapalı form; küçük alanda kaba kuvvet | PROVEN |
+| Mantık, kural tutarlılığı | sözleşme kuralları | Z3 (`unsat` çekirdeği) | PROVEN |
+| Optimizasyon (LP/MILP/konveks) | kaynak dağıtımı | HiGHS / CVXPY + dual sertifika / KKT | PROVEN / CROSS_VALIDATED |
+| Geometri, trigonometri | alan, açı, dönüşüm | SymPy cebirsel özdeşlik; Arb | PROVEN |
+| Diziler, özyineleme | faiz, Fibonacci | SymPy `rsolve` + kesin değerlendirme | PROVEN |
+| Termodinamik ve diğer fizik | çevrim verimi, buhar tabloları | Çekirdek denklemler + alan paketi (ör. özellik tabloları için CoolProp, MIT lisanslı, IAPWS-95 dahil; tablo verisi §6.2 `Table`) | PROVEN (modele göre) / CROSS_VALIDATED |
+| Soyut ispat (tümevarım, sonsuz yapılar) | "her n için …" | Karar verilebilir parçası Z3/SymPy ile; geri kalanı: §11 açık soru | §11 |
+
+Kapsam matrisi bir alt sınırdır: yönlendirici (§6.5) IR'ın yapısına bakar, alanına bakmaz. Termodinamik problemi
+alan paketi olmadan da çözülebilir, yeter ki gerekli denklemler ve veriler problemde verilmiş ya da kullanıcı
+tarafından sağlanmış olsun.
+
 ---
 
 ## 4. Temel kavramlar
@@ -122,7 +168,7 @@ reddetmeye dönüşür.
 |---|---|---|
 | **KANITLANDI** (`PROVEN`) | Sonuç, onaylı tanıma göre formal olarak doğru. | (a) Formal tanım kullanıcı tarafından onaylandı; (b) formülasyon konsensüsü **oybirliği** ile ve **≥2 farklı model ailesinden** geldi; (c) çözüm için makinece kontrol edilebilir bir sertifika var (kesin aritmetikle geri ikame, `unsat` ispatı, rasyonel aritmetikle doğrulanmış LP dual sertifikası, Arb top aritmetiğiyle hata sınırı vb.). |
 | **ÇAPRAZ DOĞRULANDI** (`CROSS_VALIDATED`) | Sonuç güçlü biçimde destekleniyor ama formal sertifika yok ya da formülasyon bağımsızlığı zayıf. | (a) Formal tanım onaylandı; (b) oybirliği konsensüsü var; (c) en az iki bağımsız yöntem aynı sonucu verdi ve sınır testleri geçti. Örnekler: ODE ile yörünge, tek model ailesinden gelen formülasyon, Mod B2'de bootstrap tabanlı istatistikler. |
-| **REDDEDİLDİ** (`REFUSED`) | Sonuç verilmedi. | Neden kodu (ör. `UNDERDETERMINED`, `INCONSISTENT`, `DIMENSION_MISMATCH`, `NO_CONSENSUS`, `SOLVER_UNKNOWN`, `CERTIFICATE_FAILED`, `USER_REJECTED_SPEC`, `TEMPLATE_SELF_CHECK_FAILED`) + sade dille açıklama + kullanıcıdan ne gerektiği. |
+| **REDDEDİLDİ** (`REFUSED`) | Sonuç verilmedi. | Neden kodu (ör. `UNDERDETERMINED`, `INCONSISTENT`, `DIMENSION_MISMATCH`, `NO_CONSENSUS`, `SOLVER_UNKNOWN`, `CERTIFICATE_FAILED`, `USER_REJECTED_SPEC`, `TEMPLATE_SELF_CHECK_FAILED`, `UNSUPPORTED_MATH`) + sade dille açıklama + kullanıcıdan ne gerektiği. |
 
 Etiketin altındaki her şart raporda ayrı ayrı "geçti/geçmedi" olarak listelenir; böylece kullanıcı güvenin neye
 dayandığını görür.
@@ -289,7 +335,11 @@ istenmez; envanterde kalır, sonraya bırakılır (Tasarımcı kararı).
 **Kapsam dışı (K13):** EK-7 uçuş bilgisayarının C/C++ kodu denetlenmez. R10 (checksum, paket kodlaması) bir
 matematik işi olarak kapsamda kalır; Rigor doğru değerleri üretir, kodun bunları üretip üretmediğine bakmaz.
 
-### 5.4. Model kütüphanesi (K10)
+### 5.4. Model kütüphanesi ve alan paketleri (K10, K24)
+
+Model kütüphanesi tek bir alana ait değildir; alan paketleri halinde düzenlenir (§3.4). v1'de sahibin
+kullanımları için iki paket gelir: `rocket` ve `finance`. Diğer alanlar (ör. `thermo`) aynı arayüzle eklenir.
+Aşağıdaki liste `rocket` paketinin v1 içeriğidir.
 
 - **v1 modelleri (öneri):** ISA 1976 standart atmosferi (sahaya göre irtifa ofsetiyle), RASP `.eng` motor dosyası
   okuyucu ve itki tablosu, Barrowman basınç merkezi, paraşüt limit hızı, ideal gaz ayırma yükü, Tsiolkovsky,
@@ -300,7 +350,9 @@ matematik işi olarak kapsamda kalır; Rigor doğru değerleri üretir, kodun bu
   işaretlenir), CSV (OpenRocket simülasyon dışa aktarımı dahil), OpenRocket `.ork` (K17; yalnızca okuma, §6.10). RASAero v1 dışı.
 - Her model: ad, sürüm, kaynak (kitap/standart), geçerlilik aralığı (ör. Barrowman küçük hücum açısı ve
   ses altı için), denklemleri IR olarak, birim testleri.
-- **Akış (K10):** Oturum başında Rigor sorar: "Kendi denklemlerini veya verilerini vermek ister misin?" Hayır derse,
+- **Akış (K10):** Rigor, problemin bir kütüphane modeli gerektirdiğini gördüğü oturumların başında sorar (saf
+  matematik problemlerinde soru sorulmaz, çünkü seçilecek model yoktur; Tasarımcı kararı, K24): "Kendi
+  denklemlerini veya verilerini vermek ister misin?" Hayır derse,
   kütüphane modelleri otomatik seçilir; seçilen her model ve parametresi (ör. "Aksaray atış alanının deniz
   seviyesinden yüksekliği") onay anlatımında listelenir. Model parametresi eksikse (ör. saha yüksekliği) K4 gereği
   sorulur, varsayılmaz. Evet derse, kullanıcının denklemleri/verisi IR'a girer ve aynı kapılardan geçer.
@@ -352,7 +404,11 @@ modeli referansı (§4.5) olabilir.
   kullanan bir kodu modellerken, açıkça). Rasyonel girdiler (`0.1`) varsayılan olarak kesin rasyonel okunur.
 - **Ek düğüm türleri (Tasarımcı kararı, roket ve mühendislik ihtiyacı için):** `Table` (tablo verisi + açık
   interpolasyon yöntemi; veri dosyasının yolu ve SHA-256 hash'i ile), `Vector` (2B/3B büyüklükler, bileşen
-  bazında birim), `NamedModel` (sürümlü, adlandırılmış alt model referansı; bkz. §4.5, §5.4). Z3/SymPy tablo fonksiyonlarını
+  bazında birim), `NamedModel` (sürümlü, adlandırılmış alt model referansı; bkz. §4.5, §5.4).
+  **Alandan bağımsızlık için (K24):** `Matrix` (kesin veya aralık), `Complex`, `Set`/`FiniteDomain`, `Quantifier`
+  (ForAll/Exists, sınırlı veya karar verilebilir fragmanlarda), `Recurrence`, `Distribution` (olasılık dağılımı),
+  `PDE` (sınır ve başlangıç koşullarıyla). Sayı alanlarına `Complex`, `ModInt(n)` (modüler tamsayı) ve `BitVec(w)`
+  eklenir. Z3/SymPy tablo fonksiyonlarını
   doğrudan kullanamaz; tablo içeren ifadeler sayısal yola yönlendirilir ve etiketleri buna göre sınırlanır.
 - **Aralıklı girdiler (Tasarımcı kararı):** Bir `given` nokta değer yerine aralık (`12 ± 0.2 kg`, `[0.40, 0.50]`)
   taşıyabilir. Kapalı formlu/sayısal yollarda aralık Arb ile sonuca taşınır ve sonuç **garanti edilen aralık**
@@ -367,7 +423,12 @@ modeli referansı (§4.5) olabilir.
 
 1. **Birim kapısı (pint):** Her ifadenin boyutu hesaplanır. `metre + saniye`, üs içinde birimli büyüklük,
    denklemin iki tarafında farklı boyut → `REFUSED (DIMENSION_MISMATCH)` veya, belirsizlik varsa, soru.
-   Birim belirtilmemiş sayısal girdi → soru (K4). Birim dönüşümleri yalnızca pint ile yapılır.
+   Birim belirtilmemiş sayısal girdi → soru (K4). **İstisna (Red Team düzeltmesi, K24):** saf matematik
+   problemlerinde ("x² − 5x + 6 = 0") büyüklükler birimsizdir; her sayıya birim sormak kullanıcıyı boşuna sıkıştırır.
+   Bu yüzden IR'da her büyüklük ya bir birim ya da açıkça `dimensionless` taşır. Problemde hiçbir fiziksel birim
+   yoksa formülatörler büyüklükleri `dimensionless` işaretler ve bu, onay anlatımında tek satırla gösterilir
+   ("Bu problemde birim yok, sayılar saf sayı olarak alındı"). Problemde **bazı** büyüklükler birimliyse,
+   birimsiz kalan her sayı için yine soru sorulur. Birim dönüşümleri yalnızca pint ile yapılır.
 2. **Serbestlik derecesi (DoF) ve yapısal analiz:** Denklem–bilinmeyen iki parçalı çizgesi (networkx) kurulur,
    maksimum eşleme bulunur, **Dulmage–Mendelsohn ayrıştırması** ile sistem eksik tanımlı (under-), tam tanımlı
    (well-) ve aşırı tanımlı (over-determined) bloklara ayrılır.
@@ -441,6 +502,12 @@ Yönlendirici, IR'ın yapısına bakarak (doğal dile değil) motoru seçer:
 | Sayısal kök, integral | python-flint/Arb (kesin hata sınırlı) | mpmath yüksek hassasiyet |
 | ODE (ör. roket irtifası) | SciPy `solve_ivp` (DOP853) | farklı integratör (Radau) + adım yarılama yakınsama testi; tam uçuş simülasyonunda opsiyonel RocketPy karşılaştırması |
 | `Decimal` hesapları (Mod B) | IR değerlendirici (`decimal` modülü, açık bağlam) | Rational ile kesin hesap + yuvarlama kuralının ayrıca uygulanması |
+| Polinom eşitsizlikleri, reel kuantörler | Z3 (nlsat, karar verilebilir) | SymPy (SOS/çarpanlara ayırma) veya dReal δ-kontrol |
+| Kesin doğrusal cebir | python-flint (`fmpq_mat`) | SymPy `Matrix` (bağımsız kesin yol) |
+| Kesin olasılık, kombinatorik | Rational sayım / SymPy stats | Küçük uzayda kaba kuvvet sayımı veya bağımsız kapalı form |
+| Sayılar kuramı, modüler | python-flint | Z3 tamsayı / bit-vektör |
+| PDE | SymPy kapalı form | Çizgiler yöntemi + iki farklı ağ çözünürlüğünde yakınsama (sertifikasız → CROSS_VALIDATED) |
+| Desteklenmeyen tür | — | `REFUSED (UNSUPPORTED_MATH)`; hangi türün neden desteklenmediği söylenir |
 
 Bilinen Z3 tuzakları (Handoff §2.3): `Optimize` `assert_and_track`'i desteklemez → önce `Solver` ile tutarlılık,
 sonra `Optimize`. Doğrusal olmayan tamsayı aritmetiği `unknown` dönebilir → zaman aşımı zorunlu; `unknown` asla
@@ -458,8 +525,10 @@ kullanan dış araçlarla (RocketPy, OpenRocket) karşılaştırma yalnızca rap
   geri konur; her kısıt için "sağlandı / sağlanmadı / belirsiz (aralık sıfırı içeriyor)" kaydedilir.
 - `unsat` iddiaları için unsat core; LP optimalliği için dual çözümün rasyonel aritmetikle kontrolü ve sıfır
   optimalite boşluğu; sayısal sonuçlar için kesin hata sınırı.
-- ODE sonuçlarında formal sertifika yoktur (Python'da hazır, kanıt üreten ODE çözücüsü bulunamadı); bu yüzden
-  ODE içeren sonuçlar en fazla `CROSS_VALIDATED` olur ve raporda tolerans, adım sayıları ve yakınsama tablosu yer alır.
+- **Sayısal** ODE/PDE sonuçlarında formal sertifika yoktur (Python'da hazır, kanıt üreten ODE çözücüsü bulunamadı);
+  bu yüzden sayısal çözüm içeren sonuçlar en fazla `CROSS_VALIDATED` olur ve raporda tolerans, adım sayıları ve
+  yakınsama tablosu yer alır. **Kapalı form** çözümü olan ODE/PDE'lerde çözüm denkleme ve başlangıç/sınır
+  koşullarına sembolik olarak geri konur; sıfır fark kanıtlanırsa `PROVEN` mümkündür (§3.4).
 
 ### 6.7. Sade anlatım (K7)
 
@@ -482,7 +551,9 @@ Sade anlatım iki yerde kullanılır:
    ("kolay"). Altında kalırsa sadeleştirme tekrarlanır. İngilizce destek eklenirse Flesch Reading Ease kullanılır.
    Formül ölçümü tek başına yeterli değildir; jargon listesi kontrolü de yapılır (§6.7 adım 2'deki kural).
 
-**Tasarımcı kararı:** Varsayılan anlatım dili Türkçe; `language` yapılandırmasıyla İngilizce eklenebilir.
+**Tasarımcı kararı:** Varsayılan anlatım dili Türkçe. Başka kişiler de kullanacağı için (K24) **İngilizce v1'de
+birinci sınıf** ikinci dildir (`language = "en"`; okunabilirlik Flesch Reading Ease ≥ 60, anlatım koruması aynı).
+Problem metni hangi dilde gelirse gelsin formülasyon aynı IR'a iner.
 
 ### 6.8. Kanıt raporu (K5)
 
@@ -723,6 +794,9 @@ güvenilmez kabul edilir**; bağımsızlık ve model kimliği her yanıtta Rigor
   hypothesis 6.170 (öz-denetim ve beklenen davranış testleri).
 - **Opsiyonel:** rocketpy 1.13 (roket karşılaştırması),
   dreal 4.21 (sistem kütüphaneleri ister; opsiyonel), jacobian 0.23 (değerlendirilecek, aşağıya bakın).
+- **Bağımlılık lisansları (Tasarımcı kararı, K22 ile uyum):** Çekirdek ve alan paketleri yalnızca izin verici
+  lisanslı (MIT, BSD, Apache-2.0, PSF, MPL-2.0) veya dinamik bağlanan LGPL (ör. python-flint içindeki FLINT)
+  bağımlılıklar kullanır. GPL lisanslı paketler bağımlılık olarak eklenmez.
 - **LLM SDK'ları:** anthropic, openai, google-genai — hepsi opsiyonel extra; API anahtarları ortam değişkeninden
   veya yapılandırma dosyasından, asla rapora yazılmaz.
 - **Güvenlik:** LLM çıktısı hiçbir zaman kod olarak çalıştırılmaz (A3). Rigor kullanıcının kodunu da çalıştırmaz
@@ -756,7 +830,9 @@ güvenilmez kabul edilir**; bağımsızlık ve model kimliği her yanıtta Rigor
 - **Altın test seti:** Elle doğrulanmış problemler + beklenen etiket. İçinde mutlaka: "en az/en fazla" tuzakları,
   birim tuzakları (N/lbf, m/ft, %/oran), eksik parametreli problemler (beklenen: `NEEDS_INPUT`), çelişkili
   problemler (beklenen: `REFUSED (INCONSISTENT)`), iki yoruma açık ifadeler (beklenen: soru), roket örnekleri,
-  `Decimal` yuvarlama örnekleri.
+  `Decimal` yuvarlama örnekleri, **ve §3.4 matrisindeki her türden en az birkaç problem** (termodinamik, olasılık,
+  doğrusal cebir, sayılar kuramı, geometri, kombinatorik, saf cebir; birimsiz problemler dahil). Desteklenmeyen
+  türler için beklenen sonuç `REFUSED (UNSUPPORTED_MATH)`'tır.
 - **Ana metrik:** Altın sette **yanlış `PROVEN` sayısı = 0** (A1). İkincil: gereksiz soru oranı, çözülebilen problem oranı.
 - **Mutasyon testi:** Doğru IR'lar bilerek bozulur (karşılaştırma yönü, birim, işaret); Red Team katmanının
   bunları yakalaması beklenir.
@@ -771,7 +847,8 @@ güvenilmez kabul edilir**; bağımsızlık ve model kimliği her yanıtta Rigor
 
 ## 10. Sıra (Tasarımcı kararı; hedef K16)
 
-Ayrıntılı takvim yok (K16). Her aşamanın sonunda araç o ana kadarki özelliklerle gerçekten kullanılabilir olur;
+Ayrıntılı takvim yok (K16). Sıra sahibin kullanımlarına göre önceliklidir, ama **çekirdek 1. aşamadan itibaren
+alandan bağımsız** yazılır (K24): roket ve finans, alan paketi olarak çekirdeğin üstüne gelir. Her aşamanın sonunda araç o ana kadarki özelliklerle gerçekten kullanılabilir olur;
 roket hesapları son aşamayı beklemeden başlayabilir.
 
 1. **Çekirdek:** IR + Python kurucu API, birim/DoF/alan kapıları, SymPy/Z3/Arb derleyicileri, sertifika, rapor,
@@ -802,7 +879,18 @@ ulaşılabilir bir etikettir (§4.1).
 Hedef → K16; OpenRocket → K17; şablon + öz-denetim → K18; hakem + öğrenme → K19; kripto botu → K20;
 Mod B kapsamı + Sentinax → K21; lisans → K22; dallar ve anonimlik → K23.
 
-Açık soru kalmadı. (Botla ilgili ertelenen bir nokta `docs/private/` altında; bot hazır olunca ele alınır.)
+Alandan bağımsızlık → K24.
+
+Açık soru (K24'ten doğdu):
+
+1. **Soyut ispatlar kapsamda mı?** "Her n doğal sayısı için …", "sonsuz sayıda asal vardır" türü, tümevarım veya
+   sonsuz yapı gerektiren ispatlar SMT/CAS ile genelde karar verilemez. Seçenekler: (a) v1'de yalnızca karar
+   verilebilir kısmı (polinom eşitsizlikleri, sonlu alanlar, doğrusal aritmetik; Z3/SymPy), geri kalanı
+   `REFUSED (UNSUPPORTED_MATH)`; Lean 4 arka ucu sonraki sürüm. (b) Lean 4 + Mathlib arka ucu v1'e dahil (LLM ispatı
+   Lean'de yazar, Lean çekirdeği kontrol eder → `PROVEN`); büyük bir ek iş ve kurulum (Lean araç zinciri, Mathlib
+   ~birkaç GB). Öneri: (a).
+
+(Botla ilgili ertelenen bir nokta `docs/private/` altında; bot hazır olunca ele alınır.)
 
 ## 12. Uygulayıcıya bırakılanlar
 
