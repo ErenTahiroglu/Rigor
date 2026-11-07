@@ -950,6 +950,8 @@ roket hesapları son aşamayı beklemeden başlayabilir.
 4b. **Lean 4 arka ucu:** §6.11 (yalıtım, yasaklı yapılar, ifade dondurma, ispat arama). Red Team katmanına bağlı
    olduğu için 3. aşamadan sonra gelir.
 4c. **Alan uyarlama araçları:** `rigor domain new/verify/bench`, `fluids` örnek paketi, paket yazma rehberi (§3.4).
+4d. **Optimizasyon:** HiGHS/CVXPY, rasyonel dual sertifika, KKT kontrolü (§6.5; K1). Red Team düzeltmesi: bu adım
+   önceki düzenlemede sıradan düşmüştü.
 5. **Mod B (finans):** B1 formül denetimi, B2 mutabakat (§5.2); kripto botu ve Sentinax (canlıya alma özeti).
 6. **Sağlamlaştırma:** altın test setinin tamamı, gerçek dosyalarla yerel kabul testi.
 

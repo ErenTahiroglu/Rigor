@@ -121,6 +121,8 @@ MCP üzerinden: `rigor_solve`, `rigor_answer`, `rigor_confirm`, `rigor_report`, 
 | Belge | İçerik |
 |---|---|
 | [Tasarım belgesi](docs/superpowers/specs/2026-11-07-rigor-design.md) | Mimari, bağlayıcı kararlar, hedefler ve anti-hedefler |
+| [Yol haritası](docs/superpowers/plans/2026-11-07-rigor-yol-haritasi.md) | Paket mimarisi, fazlar (F1–F9), çıkış ölçütleri |
+| [Faz 1 planı](docs/superpowers/plans/2026-11-07-faz-1-cekirdek.md) | Çekirdeğin adım adım TDD uygulama planı |
 | [Araştırma notları](docs/research/2026-11-07-arastirma-notlari.md) | Kaynaklı bulgular, araç durumu, sürümler, Red Team incelemeleri |
 | [Handoff](Handoff) | Projenin başlangıç devri |
 
