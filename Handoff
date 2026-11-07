@@ -1,0 +1,164 @@
+Aşağıdaki devir teslim (handoff) belgesi, yeni bir yapay zeka oturumuna veya mimari iş akışına doğrudan yapıştırılabilecek şekilde yapılandırılmıştır. Belge, **senin kesin olarak belirttiğin bağlayıcı kararları** (Bölüm 1) ve **sohbet boyunca üretilen/araştırılan tüm teknik bağlamı** (Bölüm 2) birbirine karıştırmadan, sıfır veri kaybıyla ayırır.
+
+---
+
+# PROJE DEVİR TESLİM (HANDOFF) BELGESİ: SIFIR HALÜSİNASYONLU NÖRO-SEMBOLİK MATEMATİK VE DOĞRULAMA MOTORU
+
+> **ALICI SİSTEM / AJAN İÇİN KRİTİK YÖNERGE:**
+> Bu belgede yalnızca **BÖLÜM 1** altındaki maddeler kullanıcının kesin, bağlayıcı ifadeleri ve onayladığı mimari kısıtlardır. **BÖLÜM 2**'deki tüm bilgiler, önceki oturumda yapılan literatür taramalarını, incelenen açık kaynak repoları ve tartışılan aday mekanizmaları içerir; bunlar bağlam (context) niteliğindedir ve kullanıcının Bölüm 1'deki kesin kurallarına tabidir.
+
+---
+
+## BÖLÜM 1: KULLANICININ KESİN İFADELERİ, KOMUTLARI VE MİMARİ KARARLARI (TEK BAĞLAYICI OTORİTE)
+
+### 1.1. Kullanıcının Kronolojik İstemleri (Verbatim Kayıt)
+
+1. **İstem 1:** *"Biri llm içine risk mimarisi işlemci entegre edip matematik işlemleri yaptırmış. Bu bir github reposu mu? Araştırıp bul. Sorun varsa sor bana!"*
+2. **İstem 2:** *"Bunu iyileştiren repolar veya toollar var mı?"*
+3. **İstem 3:** *"Python üzerinde Z3 SMT Solver ile bir LLM'i birleştirip doğal dildeki kısıtlamaları kesin matematiksel denklemlere döken örnek bir mimari kur."*
+4. **İstem 4:** *"Koddan önce mimariye düzgünce karar verelim. Matematiksel tüm işlemleri sıfır halüsinasyonla çözmek için en güvenilir yöntem ne? Bunu yapan açık kaynak biri var mı? Yoksa bunu nasıl yaparız? Bana gerekli soruları da sor ve gerekli araştırmaları yap!"*
+5. **İstem 5:** *"C / Ne kadar sürerse sürsün ama sonucu Red Team denetiminden geçmiş kadar kesin olsun / İkisi de / Kullanıcıyı sıkıştırmalı / Bu cevaplarla birlikte, bir araştırma için derinlemesine araştırma (deep research) promptu yaz."*
+6. **İstem 6:** *"Şu ana kadarki tüm konuşmalarımızı içeren sadece benim dediklerimi kesin olarak belirten bir handoff oluşturur musun? Tüm detayları içersin!"*
+
+### 1.2. Kullanıcının Kesinleştirdiği Mimari Kararlar (Hard Constraints)
+
+Kullanıcı, kod yazımına geçmeden önce önce mimariye düzgünce karar verilmesini emretmiş ve sistemin 4 temel yapıtaşını şu şekilde **kesin olarak** kilitlemiştir:
+
+* **Karar 1 — Birincil Problem Uzayı (Domain): Genel Amaçlı Hibrit Sistem ("C" Seçeneği)**
+* Sistem yalnızca tek bir alana odaklanmayacaktır. Hem mühendislik/fizik hesaplamalarını (termodinamik, akışkanlar, P&ID kütle/enerji denklikleri, diferansiyel ve doğrusal olmayan sürekli denklemler) hem de finansal/algoritmik modelleme, mantıksal kontrat kuralları ve optimizasyon problemlerini kapsayan **tam teşekküllü hibrit bir yönlendirici (router)** olacaktır.
+
+
+* **Karar 2 — Gecikme (Latency) vs. Kesinlik Tercihi: Sınırsız Süre, Mutlak Red Team Kesinliği**
+* Kullanıcının kesin talimatı: *"Ne kadar sürerse sürsün ama sonucu Red Team denetiminden geçmiş kadar kesin olsun."*
+* Milisaniyelik hız veya düşük gecikme hedefi yoktur. Tüm matematiksel işlemler **sıfır halüsinasyonla** çözülmelidir. Çoklu LLM çağrıları, çapraz denetimler ve resmi doğrulama adımları ne kadar sürerse sürsün uygulanacaktır.
+
+
+* **Karar 3 — Çalışma ve Entegrasyon Biçimi: Çift Arayüz ("İkisi de")**
+* Sistem hem projelerin içine doğrudan gömülebilen bağımsız bir **Python Kütüphanesi / SDK / API** olarak hem de terminal/IDE tabanlı kodlama ajanlarının (Claude CLI, Gemini CLI vb.) doğrudan bir araç olarak çağırabileceği yerel bir **MCP Sunucusu (Model Context Protocol)** olarak paketlenecektir.
+
+
+* **Karar 4 — Eksik Parametre (Under-Determined System) Politikası: "Kullanıcıyı Sıkıştırmalı" (Fail-Closed)**
+* Doğal dildeki problemde denklem sayısı bilinmeyen sayısından azsa veya örtük bir parametre eksikse, sistem **asla kendi kendine varsayım yapmayacak ve parametrik/sembolik geçiştirme yapmayacaktır**. İşlemi durdurup eksik veriyi tespit ederek kullanıcıyı sıkıştıracak (interrogation) ve eksik parametreyi talep edecektir.
+
+
+
+---
+
+## BÖLÜM 2: ARAŞTIRILAN TEKNİK BAĞLAM VE TARTIŞILAN TÜM DETAYLAR (EKSİKSİZ ARŞİV)
+
+*Not: Aşağıdaki tüm teknik bulgular, repolar, prototip kod yapıları ve 5 sütunlu araştırma çerçevesi kullanıcının soruları doğrultusunda çıkarılmış teknik envanterdir.*
+
+### 2.1. Faz 1: LLM Ağırlıklarına Gömülü RISC-V İşlemci Analizi (`Qwenputer`)
+
+Kullanıcının 1. istemi üzerine tespit edilen proje ve teknik metrikleri:
+
+* **Repo ve Modeller:** GitHub: `divagr18/qwenputer` (`experimental/riscv/` dizini) | Hugging Face: `divagr1925/Qwen3.5-4B-Qwenputer` ve `divagr1925/Qwenputer-npu`.
+* **Çalışma Prensibi:** Harici Python sandbox veya tool-calling kullanmadan, 32-bit bir **RISC-V işlemciyi (`RV32IM + Zba + bignum` yardımcı işlemcisi)** doğrudan `Qwen3.5-4B` modelinin ağırlıklarına (weights) derler.
+* **Derlenmiş Ağırlıklar (Compiled Weights):** Qwen katmanlarının önüne gradient descent ile eğitilmemiş, özel bir derleyici tarafından deterministik hesaplanmış **11 ekstra Transformer katmanı** eklenmiştir. Model standart `Qwen3_5ForCausalLM` olarak yüklenir.
+* **Bellek ve Aritmetik:** RAM, veri, kod, register'lar ve Program Counter modelin **Gated DeltaNet** durumunda (state) tutulur; üretilen her "trace token" belleğe yazma işlemidir. MLP katmanları yuvarlama hatasını önlemek için `bf16` formatında kesin arama tabloları (exact lookup tables) olarak çalışır. Model kendi forward pass'leri içinde C ve MicroPython kodu çalıştırır ve resmi `riscv-tests` testlerini geçer.
+* **Darboğazlar ve Benchmark Gerçeği:**
+* *Boyut Şişmesi:* Katman genişliği kısıtlamaları yüzünden 9.3 GB olan model **14.65 GB** boyuta çıkar.
+* *Hız:* L4 GPU üzerinde Triton executor ile saniyede sadece ~3.200 trace token (birkaç token = 1 CPU komutu) işler.
+* *Matematiksel Başarım:* **GSM8K ve GSM-Hard** testlerinde temel modelle berabere kalır (fark yaratmaz). Çünkü LLM'lerin asıl darboğazı sayıları çarpmak değil, doğal dili doğru matematiksel denkleme dökmektir (formülasyon/reasoning).
+* *QwenPU (`npu` branch'i):* İşlemciye `VDOT` ve `SMAQA` (vektör çarpım) komutları eklenerek ağırlıkların içine NPU derlenmiş, Karpathy'nin `stories260K` (260K parametreli mini Llama) modeli C programı olarak Qwen ağırlıklarının içinde çalıştırılmıştır (L4 GPU'da 1 hikaye token'ı üretimi = **41 saniye**).
+
+
+
+### 2.2. Faz 2: Nöro-Sembolik ve Autoformalization Açık Kaynak Ekosistemi
+
+Kullanıcının 2. ve 4. istemleri üzerine taranan tüm açık kaynak araçlar ve kategorileri:
+
+1. **Çoklu-Çözücü (Multi-Solver) ve Sembolik Ajan Motorları:**
+* **`morluto/jacobian`:** SymPy, Z3, NetworkX ve Python-FLINT kütüphanelerini tek bir tip-güvenli (typed) sözlük altında birleştiren MCP sunucusu ve Python paketi (`math.find` ile kontrat bulma, `math.run` ile deterministik yürütme).
+* **`sdiehl/usolver` ve `sdiehl/sympy-mcp`:** Mantıksal kısıtlamalar için **Z3**, konveks optimizasyon için **CVXPY**, kombinatoryal problemler için **Google OR-Tools** ve sembolik cebir/kalkülüs için **SymPy** motorlarını tek standart arayüzde birleştiren referans mimari.
+* **`OptiMUS` (`OptiMUS-optimization-modeling`) & `antgroup/LLMOPT`:** Karmaşık optimizasyon problemlerinde önce Bağlantı Grafiği (Connection Graph) kuran, parametre/değişken/kısıtlamaları ayrıştırıp her cümleyi bağımsız kodlayarak test eden sistemler.
+* **`SymCode` (EACL 2026):** Tüm değişken varsayımlarını (`positive=True, integer=True`) baştan tanımlamaya ve bulunan sonucu orijinal denklemlere geri koyarak (**back-substitution**) doğrulamaya zorlayan çerçeve.
+* **`loganrjmurphy/LeanEuclid` (E3 Equivalence Checker):** LLM'in kurduğu matematiksel formülün doğruluğunu Z3 ve CVC5 üzerinden mantıksal denklik kontrolü (equivalence checking) ile denetleyen mimari.
+
+
+2. **Program-Destekli Mantık (Neuro-Symbolic & SMT):**
+* **`teacherpeterpan/Logic-LM`:** Doğal dili First-Order Logic, CSP veya SMT-LIB formüllerine çevirip hata durumunda *Self-Refinement* ile düzelten mimari.
+* **`microsoft/ToRA` (Tool-Integrated Reasoning Agents):** SymPy/NumPy çıktılarıyla mantıksal tutarlılığı kontrol ederek yön değiştiren ajan yapısı.
+* **`reasoning-machines/pal` (Program-Aided Language Models):** Düşünce zincirini anlamlı değişken isimlerine sahip Python betiklerine döken yaklaşım.
+
+
+3. **Resmi İspat Motorları (Formal Theorem Provers):**
+* **`deepseek-ai/DeepSeek-Prover-V1.5` (ve V2):** Doğal dil problemlerini **Lean 4** diline çevirip (autoformalization) MCTS ve derleyici geri bildirimiyle doğrulayan açık ağırlıklı model.
+* **`lean-dojo/LeanDojo`:** LLM'lerin Lean 4 ortamıyla etkileşime girip resmi ispat inşa etmesini sağlayan altyapı.
+
+
+4. **Süreç Ödül Modelleri ve Arama Ağaçları (PRM & MCTS):**
+* **`maitrix-org/llm-reasoners`:** Düşünce adımlarını MCTS veya Beam Search ile dallandırıp ödül modeliyle budayan kütüphane.
+* **`openreasoner/openr`:** Process Reward Model (PRM) ve test-time compute mimarisinin açık kaynaklı implementasyonu (hatalı ara satırı yakalayıp backtracking yapma).
+* **`microsoft/rStar` (`rStar-Math`):** Küçük modelleri (7B-8B) MCTS ve kod sentezleme doğrulamasıyla birleştiren framework.
+
+
+5. **Yapısal Kısıtlama Araçları:**
+* **`stanfordnlp/dspy`:** `dspy.Assert` ve `dspy.Suggest` ile matematiksel/yapısal kısıt ihlallerinde modeli otomatik geri sarıp düzelttiren framework.
+
+
+
+### 2.3. Faz 3: Z3 + Pydantic Prototip Bulguları ve Teknik Darboğazlar
+
+Kullanıcının 3. istemi üzerine kurulan örnek Z3 mimarisinde ortaya konan teknik mekanizmalar (kullanıcının 4. istemiyle kod aşamasından mimari karar aşamasına geri çekilmiştir, ancak teknik bulgular şunlardır):
+
+* **Veri Kontratı (`SymbolicModel`):** LLM'e ham `exec()` kodu yazdırmak yerine `VariableDef` (`Int`, `Real`, `Bool`), `ConstraintDef` (`id`, `natural_language_source`, `expression`) ve `objective_expression` (`maximize`, `minimize`) içeren Pydantic şeması kullanıldı.
+* **İzole Değerlendirme (`safe_globals`):** `__builtins__` tamamen kapatılarak yalnızca Z3 kapılarına (`And`, `Or`, `Not`, `Implies`, `If`, `Abs`) izin verildi.
+* **Çelişki Çekirdeği (`assert_and_track` & `unsat_core`):** Her kural kendi kimliğiyle (`C1`, `C2`) izlemeye alındı; `z3.unsat` durumunda hangi kuralların çarpıştığı nokta atışı yakalanıp LLM'e geri beslendi (`solve_with_refinement`).
+* **Hassasiyet Koruması:** Float yuvarlama hatalarını (`0.1 + 0.2 != 0.3`) önlemek için Z3 `RatNumRef` (sonsuz hassasiyetli `p/q` rasyonel kesirleri) kullanıldı.
+* **Tespit Edilen 2 Kritik Z3 Darboğazı:**
+1. *`z3.Optimize()` ve `unsat_core` Uyumsuzluğu:* Z3'te optimizasyon sınıfı doğrudan `assert_and_track` desteklemez. Çözüm iki aşamalı olmalıdır: Önce `z3.Solver()` ile `sat` (tutarlılık) doğrulanmalı, sonra `z3.Optimize()` ile maksimizasyon/minimizasyon yapılmalıdır.
+2. *Doğrusal Olmayan Tam Sayı Aritmetiği (`QF_NIA`):* Tam sayı değişkenlerin birbiriyle çarpıldığı (`x * y == 50`) denklemlerde Gödel'in eksiklik teoremi sınırları nedeniyle Z3 `unknown` dönebilir veya kilitlenebilir; `solver.set("timeout", 5000)` zorunludur.
+
+
+
+### 2.4. Faz 4: Halüsinasyon Taksonomisi, Çözücü Matrisi ve Tartışılan 4 Katmanlı Mimari
+
+Kullanıcının 4. istemi üzerine yapılan analizde matematiksel halüsinasyon ikiye ayrılmıştır:
+
+* **Tip-1 (Hesaplama/Yürütme Halüsinasyonu):** Aritmetik veya sembolik işlem hatası (Deterministik motorlar bunu %100 sıfırlar).
+* **Tip-2 (Anlamsal Formülasyon / Autoformalization Halüsinasyonu):** Doğal dildeki kuralı yanlış denkleme çevirmek (Örn: *"en fazla"* ifadesini `>=` kodlamak). Çözücü yanlış sorunun kusursuz cevabını vereceği için en tehlikeli hata budur.
+
+**Tartışılan Çoklu-Çözücü (Multi-Solver) Yönlendirme Matrisi:**
+
+| Matematiksel Alan | Örnek Problem | Doğru Deterministik Motor | Yanlış Motor Seçilirse Oluşan Hata |
+| --- | --- | --- | --- |
+| **Mantık ve Kural Kısıtlamaları (SMT/CSP)** | Kural çelişkisi, durum doğrulama, tam sayı/boolean kısıtlar | **Z3 Solver / CVC5** | SymPy kombinatoryal patlama yaşar ve kilitlenir. |
+| **Sembolik Cebir ve Kalkülüs (CAS)** | Türev, integral, diferansiyel denklem, seri açılımı, analitik kök | **SymPy / Python-FLINT** | Z3 türev veya integral kavramını bilmez. |
+| **Büyük Ölçekli Optimizasyon (LP/MILP/QP)** | Portföy/bütçe optimizasyonu, çizelgeleme, 1000+ değişkenli maliyet | **HiGHS / Google OR-Tools / CVXPY** | Z3 `Optimize()` yüzlerce değişkende üstel yavaşlar. |
+| **Sayısal Analiz ve Lineer Cebir** | Büyük matris özdeğerleri, ODE/PDE sayısal integrasyonu | **SciPy / NumPy / mpmath** | Sembolik çözücüler büyük matris determinantında belleği tüketir. |
+| **Soyut Teorem İspatı** | Sonsuz uzayda tümevarım ve soyut ispatlar | **Lean 4** | Sayısal/SMT çözücüler tümevarım yapamaz. |
+
+**Tartışılan 4 Katmanlı Aday Mimari ve Matematiksel Silahlar:**
+
+1. **Katman 1 — Boyut/Birim Güvenlik Duvarı (Dimensional Guard) ve Bağlantı Grafiği:** `pint` kütüphanesi ile tüm değişkenlerin fiziksel/finansal birimlerinin (`kg`, `m/s`, `USD`, `oran`) çıkarılması; elma ile armudun (`metre + saniye`) toplanmasının çözücü öncesinde reddedilmesi.
+2. **Katman 2 — Motor-Bağımsız Ara Temsil (Unified Mathematical AST / IR) ve Eksik Veri Yakalama:**
+* `eval()`/`exec()` kullanmadan Z3, SymPy, CVXPY ve Pint'e derlenebilen JSON/Pydantic AST şeması.
+* **Dulmage-Mendelsohn (DM) Ayrıştırması & Sembolik Jakobiyen Rank Analizi:** Denklemler ve değişkenler arasında iki parçalı çizge (bipartite graph) kurarak çözücüye gitmeden önce sistemin *under-determined* (serbestlik derecesi `DoF > 0` — eksik tanımlı), *well-constrained* (tam tanımlı) veya *over-determined* (`unsat_core` — aşırı tanımlı) alt bloklarını matematiksel olarak ayırma ve eksik değişkenler için kullanıcıyı sıkıştırma.
+
+
+3. **Katman 3 — Red Team Anlamsal Doğrulama Katmanı (Tip-2 Halüsinasyonu Sıfırlama):**
+* **Çapraz Formülasyon Denklik Kontrolü ($F_1 \oplus F_2$):** İki bağımsız LLM çağrısının aynı metinden ürettiği $F_1$ ve $F_2$ formüllerinin Z3 üzerinde `Not(F1 == F2)` ile test edilmesi; `sat` çıkarsa iki yorumu ayrıştıran somut karşı-örneğin (counterexample) çıkarılması.
+* **Kör Geri-Çeviri (Blind Back-Translation):** Orijinal soruyu görmeyen bağımsız bir denetçi LLM'in AST denklemlerini doğal dile geri çevirmesi ve orijinal metinle anlamsal denklik kontrolü yapılması.
+* **Sınır Değer ve Mutasyon Testi:** Denklemlerin `0`, `Inf`, negatif değerler ve birim sınırlarında stres testine sokulması.
+
+
+4. **Katman 4 — Çoklu-Çözücü Yürütme ve İkame Testi (Back-Substitution):** Bulunan sonuçların orijinal kısıt fonksiyonlarına sayısal olarak geri yazılıp (`NaN`, `Inf`, yuvarlama kayması) doğrulanması.
+
+### 2.5. Faz 5: Hazırlanan Deep Research (Derin Araştırma) Spesifikasyonu Özeti
+
+Kullanıcının 5. istemi doğrultusunda (hem Türkçe hem İngilizce olarak) oluşturulan Deep Research promptu şu 5 sütunu (Pillar) araştırmak üzere kurgulanmıştır:
+
+* **Sütun 1:** Birleşik Ara Temsil (Unified IR) ve Çoklu-Çözücü Yönlendirme (`usolver`, `jacobian`, `OptiMUS`, `LLMOPT`, `SymCode`, `Logic-LM` analizi ve hibrit problem parçalama).
+* **Sütun 2:** Çözücü Öncesi Serbestlik Derecesi (`DoF`) ve Yapısal Gözlemlenebilirlik (Modelica/Dymola tarzı Bipartite Graph Matching, Dulmage-Mendelsohn Decomposition ve Symbolic Jacobian Rank ile "Fail-Closed" kullanıcı sıkıştırma motoru).
+* **Sütun 3:** Red Team Anlamsal Doğrulama ($F_1 \oplus F_2$ SMT karşı-örnek üretimi, Kör Geri-Çeviri protokolü ve Sınır Değer/Mutasyon testi).
+* **Sütun 4:** Çift Arayüz Mimarisi (Python SDK + Çok adımlı `MissingParameterError` durumunu koruyan Stateful MCP Sunucusu durum makinesi tasarımı).
+* **Sütun 5:** Mevcut açık kaynak projelerin hata modlarını (failure modes) gösteren karşılaştırmalı matris ve uçtan uca modül mimarisi planı.
+
+---
+
+## BÖLÜM 3: YENİ OTURUM İÇİN BAŞLATMA KOMUTU (KOPYALA-YAPIŞTIR ÖZETİ)
+
+Yeni bir oturuma geçerken bu belgenin altına şu komutu ekleyerek kaldığın yerden devam edebilirsin:
+
+> *"Yukarıdaki Handoff belgesini oku. Bölüm 1'deki kararlarım kesin ve değiştirilemez mimari kısıtlardır. Bölüm 2 ise şimdiye kadar konuştuğumuz teknik bağlamdır. Şimdi [Deep Research sonuçlarını inceleyerek / doğrudan mimari spesifikasyonu kurarak] bir sonraki adıma geçelim."*

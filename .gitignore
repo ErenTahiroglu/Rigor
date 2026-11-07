@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.hypothesis/
+dist/
+build/
+*.egg-info/
+
+# Rigor yerel verileri (oturumlar, şablonlar, raporlar)
+.rigor/
+
+# Yarışma şartnameleri, takım verileri ve özel notlar repoya girmez (tasarım §9)
+private/
+docs/private/
