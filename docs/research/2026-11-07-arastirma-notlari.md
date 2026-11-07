@@ -255,3 +255,57 @@ Hedef K21: canlıya almadan matematiksel doğruluk. 810 dosya, `backend/engine` 
 | `fund_annualized_returns.py` | `(1+R)^(12/H) − 1`, yalnızca 12/36/60 ay; doğru. | Uyumlu |
 | `fund_drawdown.py` + Calmar | Maks. düşüş `1 − fiyat/zirve`, `[0,1]` büyüklük; Calmar = yıllık getiri / maks. düşüş, işaret doğru. | Uyumlu |
 | `allocation_user_view_posterior.py` | Black-Litterman benzeri sonsal, Joseph karekök formu, LDLᵀ ile çözüm (ters alma yok). Formüllerin referansla denkliği **henüz kontrol edilmedi**; B1'in ilk adaylarından. | Kontrol edilecek |
+
+## 16. Plan öncesi doğrulama turu (2026-11-07)
+
+**Yerel ortam (sahibin makinesi):** Python 3.15 **kurulu değil**; `uv` 0.10.11 (2026-03-16) yalnızca 3.15.0a7'yi
+listeliyor, yani eski. python.org'da `3.15.0/`, `3.15.1/`, `3.15.2/` dizinleri var. Kurulu: 3.14.3 (uv), 3.12.16
+(Homebrew). Docker/Podman/OrbStack, `elan`, `lean` yok. → 1. aşamanın ilk adımı `uv self update` + `uv python install 3.15`.
+
+**PyPI wheel durumu (macOS arm64, 2026-11-07):**
+
+| Paket | Sürüm | Lisans | 3.15'te kurulur mu |
+|---|---|---|---|
+| pint | 0.26.2 | BSD-3 | evet (saf Python) |
+| python-flint | 0.9.0 | MIT + LGPL-3.0+ | **evet, `cp310-abi3` wheel** (§10'daki "yok" notu yanlıştı) |
+| z3-solver | 5.3.3.0 | MIT | evet, `py3-none-macosx_13_0_arm64` |
+| sympy / pydantic / mcp / networkx | 1.14.0 / 2.14.3 / 2.3.0 / 3.7 | BSD / MIT / MIT / BSD | evet |
+| scipy / hypothesis | 1.18.1 / 6.170.15 | BSD / MPL-2.0 | evet, cp315 |
+| CoolProp | 8.0.0 | MIT | evet, `cp312-abi3` |
+| highspy / cvxpy | 1.15.1 / 1.9.3 | MIT / Apache-2.0 | **hayır** |
+| iapws | 1.5.5 | **GPL-3** | (kullanılmaz; §8.3 lisans kuralı) |
+| lean-interact | 0.11.6 | MIT | evet (Lean REPL için Python arayüzü) |
+
+**Geçici ortamda denendi (3.14, `uv run --with`):**
+- `pint.UnitRegistry(non_int_type=Fraction)`: `8000 ft → 12192/5 m` (kesin), `1 lbf → 8896443230521/2000000000000 N`,
+  `25 °C → 5963/20 K` (ofsetli birim kesin), `m + s` → `DimensionalityError`. R1'in `PROVEN` yolu çalışıyor.
+- `flint.arb(2).sqrt()` top döndürüyor; `flint.acb.integral` kesin hata sınırlı integral veriyor; `fmpq_mat.inv()` kesin.
+- Z3 doğrusal olmayan reel aritmetik: `∀x. x² − 2x + 1 ≥ 0` kanıtlandı (değillemesi `unsat`).
+- `networkx.bipartite.hopcroft_karp_matching` var; Dulmage–Mendelsohn ayrıştırması networkx'te hazır yok, eşleme
+  üzerine yazılacak.
+- **MCP 2.x:** `mcp.server.fastmcp` kaldırıldı; `from mcp.server.mcpserver import MCPServer, Context`.
+  `Context.elicit(message, schema)` → `ElicitationResult` (`AcceptedElicitation` / `DeclinedElicitation` /
+  `CancelledElicitation`); `Context.client_capabilities` var. `MCPServer.run(transport="stdio")`.
+
+**Claude Code elicitation:** CLI form modunu gösteriyor (v2.1.76'dan beri; üçüncü taraf kaynaklar). **VS Code
+eklentisi** yeteneği bildirip istekleri kullanıcıya göstermeden otomatik reddediyor diye açık hata kayıtları var
+(eklenti 2.1.284–2.1.285 raporu açık). Resmi Anthropic belgesi değil; 1. aşamadaki deneyle ölçülecek.
+— [claudeissues #79174](https://claudeissues.com/issue/79174-mcp-elicitation-capability-is-declared-but-requests-are-auto-declined-print-mode),
+[#98256](https://claudeissues.com/issue/98256-bug-mcp-elicitation-capability-is-declared-but-requests-are-auto-declined-print),
+[#41292](https://claudeissues.com/issue/41292-vs-code-extension-silently-declines-mcp-elicitation-requests-onelicitation-callb),
+[havoptic: Claude Code 2.1.76](https://www.havoptic.com/r/claude-code-2.1.76),
+[MCP spec: elicitation](https://modelcontextprotocol.io/specification/latest/client/elicitation)
+
+**Lean ispat doğrulama (resmi başvuru belgesi):** Katmanlar: derleme → `#print axioms` (standart: `propext`,
+`Classical.choice`, `Quot.sound`; `sorryAx` ve `_native` içerenler ret) → `lean4checker --fresh` (`.olean` biçimini
+doğrulamaz, kötü niyetli dosyayla kandırılabilir) → **`lake comparator`** (yapay zekâ ispatları için önerilen: yalıtılmış
+derleme, ispat teriminin dışarı aktarılıp doğrulanması, çekirdek + bağımsız `nanoda` (Rust) denetleyicisi, ispatlanan
+ifadenin güvenilir "challenge" dosyasıyla karşılaştırılması). Yerel değerlendirme (`decide +native`, `bv_decide`)
+bu araçlarla denetlenemez. `Lean.trustCompiler` 4.35.0'da kaldırıldı. Mathlib önbellek boyutu için kaynak bulunamadı.
+— [Lean Reference: Validating a Lean Proof](https://lean-lang.org/doc/reference/latest/ValidatingProofs/),
+[lean-interact (PyPI)](https://pypi.org/project/lean-interact/)
+
+**OpenRocket `.ork`:** ZIP içinde `rocket.ork` XML (+ isteğe bağlı görseller, `thrustcurves/`); `openrocket` etiketinin
+`version` özniteliği biçim sürümüdür; `flightdata` öznitelikleri (ör. `launchrodvelocity`, 12.03 / biçim 1.4'ten beri)
+belgede tam listelenmez, başvuru OpenRocket kaynak kodudur. Okuyucu gerçek bir 24.x dosyasıyla test edilmeli.
+— [OpenRocket File Specification](https://openrocket.readthedocs.io/en/latest/dev_guide/file_specification.html)

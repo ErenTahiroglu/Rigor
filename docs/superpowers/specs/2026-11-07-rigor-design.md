@@ -723,9 +723,14 @@ geçmiş kullanımlarına deterministik olarak uygular:
    olmalıdır; ispat sırasında ifadeyi değiştirme (zayıflatma, notasyonu yeniden tanımlama) böylece yakalanır.
 3. **İspat arama:** LLM'ler ispatı yazar; Lean hata mesajları geri beslenir; K2 gereği bütçe yapılandırılabilir ama
    sonsuz değildir. Bulunamazsa `REFUSED (PROOF_NOT_FOUND)`. Bu, zor teoremlerde sık olacaktır ve dürüst sonuçtur.
-4. **Kontrol (sertifika):** Lean çekirdeği ispatı kontrol eder; ardından `#print axioms` ile yalnızca standart
-   aksiyomlar (`propext`, `Classical.choice`, `Quot.sound`) kullanıldığı doğrulanır ve ispat bağımsız bir çekirdek
-   denetleyicisiyle (ör. `lean4checker`) yeniden kontrol edilir.
+4. **Kontrol (sertifika):** Lean başvuru belgesi ("Validating a Lean Proof") yapay zekâ tarafından üretilmiş
+   ispatları **kötü niyetli** tehdit modelinde sayar ve en güçlü katman olarak `lake comparator`'ı önerir. Rigor bu
+   katmanı kullanır: dondurulmuş ifade "challenge" dosyasıdır; `comparator` ispatı yalıtılmış ortamda derler, ispat
+   terimini dışarı aktarıp biçimini yalıtım dışında doğrular, Lean çekirdeği **ve** bağımsız Rust denetleyicisi
+   `nanoda` ile yeniden oynatır ve ispatlanan ifadenin challenge ile aynı olduğunu kontrol eder. Ek olarak
+   `#print axioms` yalnızca `propext`, `Classical.choice`, `Quot.sound` göstermelidir (`sorryAx`, `_native` içeren
+   ya da başka bir aksiyom → ret). Yerel (native) değerlendirme (`decide +native`, `bv_decide`) `comparator` ile
+   denetlenemediği için yasaktır.
 5. Geçerse sonuç `PROVEN`; raporda ifade, ispat, Lean/Mathlib sürümleri ve aksiyom listesi yer alır.
 6. **Yeniden üretim:** Mathlib sürümleri değiştikçe eski ispatlar derlenmeyebilir. `rigor replay` ispatı raporda
    kayıtlı araç zinciri ve Mathlib sürümüyle yeniden kontrol eder; o sürüm yoksa "yeniden kontrol edilemedi" der.
@@ -771,7 +776,9 @@ Ayrıca: `s.submit_ir(ir_json)` (formülasyonu kendisi getiren çağıranlar iç
 
 ### 7.2. MCP sunucusu
 
-- **SDK:** resmi `mcp` Python SDK 2.x (2026-11 itibarıyla PyPI'da 2.3.0). Taşıma: stdio (yerel).
+- **SDK:** resmi `mcp` Python SDK 2.x (2026-11 itibarıyla PyPI'da 2.3.0). 2.x'te `FastMCP` adı `MCPServer` oldu
+  (`from mcp.server.mcpserver import MCPServer, Context`); elicitation `await ctx.elicit(message, schema=PydanticModel)`
+  ile yapılır ve `AcceptedElicitation | DeclinedElicitation | CancelledElicitation` döner. Taşıma: stdio (yerel).
 - **Araçlar (taslak):** `rigor_solve(problem, ir?)`, `rigor_answer(session_id, answers)`,
   `rigor_confirm(session_id, decision, corrections?)`, `rigor_audit_formula(formula, reference?)`,
   `rigor_reconcile(template, data_path)`, `rigor_adjudication(template)` (hakem sonucunu görme/karar),
@@ -784,9 +791,19 @@ Ayrıca: `s.submit_ir(ir_json)` (formülasyonu kendisi getiren çağıranlar iç
      `rigor_answer` ile iletir → girdi `VIA_AGENT_UNVERIFIED` (§4.3). Araç açıklamalarında ajana "bu soruları
      kendin cevaplama, kullanıcıya sor" talimatı açıkça yer alır.
 - Onay (`NEEDS_CONFIRMATION`) için de aynı iki yol geçerlidir.
-- **Tasarımcı kararı:** Sahibin kullandığı Claude Code sürümünde elicitation'ın gerçekten çalıştığı, MCP aşamasını
-  beklemeden erken bir deneyle (küçük bir deneme sunucusu) doğrulanır; sonuç, MCP üzerinden `PROVEN`'a
-  ulaşılabilirliği belirler.
+- **Red Team bulgusu (2026-11-07):** Claude Code **CLI** form elicitation'ı gösteriyor; ama **VS Code eklentisinin**
+  elicitation yeteneğini bildirip istekleri kullanıcıya göstermeden otomatik reddettiğine dair açık hata kayıtları var
+  (eklenti 2.1.284–2.1.285; kaynaklar araştırma notları §16). Sahip Claude Code'u VS Code'da kullanıyor. Elicitation
+  reddedilirse onay ajan üzerinden gelir ve sonuç en fazla `CROSS_VALIDATED` olur (§4.3), yani `PROVEN`'a MCP'den
+  ulaşılamaz.
+- **Tasarımcı kararı — bant dışı onay kanalı:** Elicitation reddedilir veya desteklenmezse Rigor onayı ajanın
+  dışından ister: **işletim sistemi diyaloğu** (macOS `osascript`, Linux `zenity`), onay anlatımının kısa hali ve
+  tam rapora bağlantıyla. Bu kanaldan gelen cevap `USER_DIRECT` sayılır ve kaydında kanal (`os_dialog`) yazar.
+  **Dürüst sınır:** Aynı makinede sınırsız kabuk ve masaüstü erişimi olan bir ajan yerel kanalları da taklit
+  edebilir; Rigor çıtayı yükseltir ama bunu kanıtlayamaz. Rapor onay kanalını gösterir; `require_confirmation_channel
+  = "elicitation"` seçilirse yalnızca istemci formu kabul edilir.
+- Elicitation'ın sahibin ortamında (CLI ve VS Code) gerçekten çalışıp çalışmadığı 1. aşamada küçük bir deneme
+  sunucusuyla ölçülür ve `rigor doctor` çıktısına yazılır.
 - Oturumlar sunucu yeniden başlasa da diskten devam eder.
 
 ---
@@ -800,10 +817,12 @@ Sahip, lazy import için Python 3.15 öneriyor. İnceleme (2026-11-07):
 - **Özellik gerçek ve uygun:** PEP 810 (Final) `lazy import x` / `lazy from x import y` sözdizimini 3.15'e getirdi;
   3.15.0 2026-10-09'da yayımlandı (ikincil kaynaklar). SymPy, SciPy, CVXPY gibi ağır kütüphaneler yalnızca gerektiğinde
   yüklenir; MCP sunucusunun ve CLI'nin açılışı hızlanır. Gerekçe geçerli.
-- **Engel 1 — bağımlılık wheel'leri:** 2026-11-07 itibarıyla PyPI'da macOS arm64 için **cp315 wheel'i olmayanlar**:
-  `python-flint` 0.9.0 (Arb, yani kesin hata sınırlarının temeli), `highspy` 1.15.1 (LP/MILP), `cvxpy` 1.9.3, `osqp`,
-  `cantera` 3.2.0. Bunlar ya kaynaktan derlenmeli (C/C++ derleyici ve FLINT kütüphanesi gerekir) ya da wheel'ler
-  çıkana kadar beklenmeli. `numpy`, `scipy`, `pydantic-core`, `scs`, `crosshair-tool` hazır; saf Python paketler sorunsuz.
+- **Engel 1 — bağımlılık wheel'leri (2026-11-07 ikinci kontrolde düzeltildi):** `python-flint` 0.9.0'ın
+  `cp310-abi3` wheel'i, `z3-solver`'ın `py3-none` wheel'i ve CoolProp 8.0.0'ın `cp312-abi3` wheel'i 3.15'te de
+  kurulur (ilk incelemedeki "flint 3.15'te yok" notu yanlıştı). `scipy` ve `hypothesis` cp315 wheel'i yayımlamış.
+  **3.15 wheel'i gerçekten olmayanlar:** `highspy` 1.15.1, `cvxpy` 1.9.3, `osqp`, `cantera` 3.2.0 (optimizasyon ve
+  yanma). Bunlar 1. aşamada gerekmez; ilgili aşamada kaynaktan derlenir ya da wheel beklenir, yoksa `rigor doctor`
+  ilgili motoru kapalı bildirir. `numpy`, `scipy`, `pydantic-core`, `scs`, `crosshair-tool` hazır; saf Python paketler sorunsuz.
   `jacobian` 0.23 `<3.14` istediği için 3.15'te kullanılamaz.
 - **Risk 2 — hataların gecikmesi (A1 açısından önemli):** Lazy import'ta `ImportError` import satırında değil ilk
   kullanımda çıkar. Bir çözücü arka ucu eksikse bu, boru hattının ortasında ortaya çıkar. **Önlem (Tasarımcı
@@ -919,7 +938,10 @@ alandan bağımsız** yazılır (K24): roket ve finans, alan paketi olarak çeki
 roket hesapları son aşamayı beklemeden başlayabilir.
 
 1. **Çekirdek:** IR + Python kurucu API, birim/DoF/alan kapıları, SymPy/Z3/Arb derleyicileri, sertifika, rapor,
-   `rigor doctor`, ince MCP + elicitation deneyi. Kullanılabilir: R1–R4, R7–R11 elle kurulan IR ile (`CROSS_VALIDATED`, §4.4).
+   `rigor doctor`, ince MCP + elicitation deneyi + bant dışı onay. Kullanılabilir: R1, R8–R11 ve saf matematik
+   problemleri elle kurulan IR ile (`CROSS_VALIDATED`, §4.4); R2–R4 ve R7 de denklemler ve değerler elle
+   verilirse (Red Team düzeltmesi: dosya okuyucular ve ISA/Barrowman modelleri 2. aşamada geldiği için bunlar 1.
+   aşamada otomatik değildir).
 2. **Roket fiziği:** §5.4 model kütüphanesi + doğrulamaları (§4.5), `.eng`/xlsx/CSV/`.ork` okuyucular, ODE +
    yakınsama, OpenRocket karşılaştırması (§6.10). Kullanılabilir: R5, R6.
 3. **Red Team + doğal dil:** ayrıştırma, CLI/Groq formülatör adaptörleri, hizalama, denklik, roundtrip, mutasyon,
