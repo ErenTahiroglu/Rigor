@@ -14,6 +14,18 @@ build/
 # Rigor yerel verileri (oturumlar, şablonlar, raporlar)
 .rigor/
 
-# Yarışma şartnameleri, takım verileri ve özel notlar repoya girmez (tasarım §9)
+# Yarışma şartnameleri, takım verileri ve özel notlar repoya girmez (tasarım §9).
+# Ayrıca burada durur: yerel hesap/istemci envanteri, ham araştırma dökümleri,
+# yeterlik setinin gizli payı.
 private/
 docs/private/
+
+# API anahtarları ve sırlar (K14: anahtarlar ortam değişkeninden okunur; dosyaya yazılırsa repoya girmesin)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Claude Code: kişisel yerel ayarlar (proje ayarı .claude/settings.json repoda kalabilir)
+.claude/settings.local.json

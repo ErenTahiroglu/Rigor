@@ -4,6 +4,10 @@
 Python kütüphanesi + MCP sunucusu (Claude Code ve diğer kodlama ajanları için).
 
 > **Durum:** Tasarım aşaması. Henüz kod yok; mimari ve kararlar [tasarım belgesinde](docs/superpowers/specs/2026-11-07-rigor-design.md).
+>
+> **Revizyon sürüyor (2026-11-10):** Etiketler, hakem heyeti ve model erişimi yeniden ele alınıyor. Alınan kararlar ve
+> açık noktalar [`concepts_brief.md`](concepts_brief.md) dosyasında; tasarım belgesine henüz işlenmedi. Aşağıdaki
+> etiket tablosu ve model erişimi anlatımı önceki sözleşmeyi yansıtır.
 
 ---
 
@@ -124,6 +128,8 @@ MCP üzerinden: `rigor_solve`, `rigor_answer`, `rigor_confirm`, `rigor_report`, 
 | [Yol haritası](docs/superpowers/plans/2026-11-07-rigor-yol-haritasi.md) | Paket mimarisi, fazlar (F1–F9), çıkış ölçütleri |
 | [Faz 1 planı](docs/superpowers/plans/2026-11-07-faz-1-cekirdek.md) | Çekirdeğin adım adım TDD uygulama planı |
 | [Araştırma notları](docs/research/2026-11-07-arastirma-notlari.md) | Kaynaklı bulgular, araç durumu, sürümler, Red Team incelemeleri |
+| [Karar özeti (taslak)](concepts_brief.md) | Etiket, yeterlik ve heyet revizyonu: alınan kararlar, Red Team bulguları, açık noktalar |
+| [Ham araştırma raporları](docs/research/Deep%20Research/) | Dış araçla üretilmiş raporlar ve hesap eki. Doğrulanmış sonuç değildir; denetimi karar özetindedir |
 | [Handoff](Handoff) | Projenin başlangıç devri |
 
 ## Lisans
