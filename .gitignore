@@ -11,6 +11,12 @@ dist/
 build/
 *.egg-info/
 
+# Geliştirme araçlarının önbellekleri (mimari §5.2: ruff, mypy, import-linter, mutmut)
+.ruff_cache/
+.mypy_cache/
+.import_linter_cache/
+mutants/
+
 # Rigor yerel verileri (oturumlar, şablonlar, raporlar)
 .rigor/
 
@@ -35,3 +41,20 @@ docs/private/
 
 # Claude Code: kişisel yerel ayarlar (proje ayarı .claude/settings.json repoda kalabilir)
 .claude/settings.local.json
+
+# Geliştirme araçlarının yerel çıktıları (isteğe bağlı araçlar; çıktıları yereldir, repoya girmez)
+graphify-out/
+# codebase-memory dizin dosyası (index_repository persistence=true seçilirse yazılır)
+.codebase-memory/
+
+# EGM inceleme ara çıktıları kök dizine yazılır. Kalıcı sonuç docs/decisions/ altına işlenir;
+# ara raporlar repoya girmez. (Bu dosya adları yalnızca kökte yok sayılır.)
+/design_draft.md
+/concepts_brief.md
+/*_report.md
+
+# Editör ve geçici dosyalar
+.vscode/
+.idea/
+*.swp
+*~

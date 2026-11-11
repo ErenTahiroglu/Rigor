@@ -5,13 +5,16 @@
 - **Durum:** Taslak. Altı sorunun hepsine sahip cevap verdi; soru 5 sahibin isteğiyle araştırılıp açık bırakıldı.
   2026-11-10'da yedi taze gözlü inceleme ajanı (EGM) depoyu ve bütün kararları taradı ("Tam tarama"). 2026-11-11'de
   sahibin eklediği iki dış tarama raporu denetlendi ("İkinci dış tarama"); bu bölüm ilk taramanın bazı maddelerini
-  düzeltiyor ve çakışmada önceliklidir. Bütün kararların tek listesi "Kayıt" bölümünde. Kararlar tasarım belgesine
-  henüz işlenmedi.
+  düzeltiyor ve çakışmada önceliklidir. Bütün kararların tek listesi "Kayıt" bölümünde. 2026-11-11'de sahip on üç
+  öneriyi onayladı (S-20 … S-32); kararlar yeni mimari belgesine
+  ([`../design/2026-11-11-rigor-mimari.md`](../design/2026-11-11-rigor-mimari.md)) ve faz planına
+  ([`../plans/2026-11-11-rigor-faz-plani.md`](../plans/2026-11-11-rigor-faz-plani.md)) işlendi. Bu belge karar geçmişi
+  olarak kalır.
 
 ## Genel bakış
 
 Rigor, bir yapay zekâya yaptırılan matematiğin doğruluğunu denetleyen bir araç. Henüz kod yok; tasarım belgesi
-(`docs/superpowers/specs/2026-11-07-rigor-design.md`), yol haritası ve Faz 1 planı var.
+(`docs/design/2026-11-07-rigor-design.md`), yol haritası ve Faz 1 planı var.
 
 Bu belge, sahibin 2026-11-10'da verdiği altı kararın tasarımı nasıl değiştireceğini çalışır:
 
@@ -433,12 +436,13 @@ Bu sıraya göre en küçük v1 (tasarımcı önerisi):
 
 ### İkinci dış tarama (2026-11-11): iki rapor, Faz II ve ekleri
 
-Sahip 2026-11-11'de iki dış tarama raporu ve ekleri ekledi (hepsi `docs/research/Deep Research/` altında):
+Sahip 2026-11-11'de iki dış tarama raporu ve ekleri ekledi (hepsi `docs/research/external-reports/` altında):
 
-- **R-TR:** "Rigor - Tam Depo Adversarial Red Team Denetimi ve Mimari Güvence Raporu.md".
-- **R-FII:** "RIGOR — FULL REPOSITORY ADVERSARIAL RED TEAM &amp;.md". İçinde iki rapor var: birinci tur
+- **R-TR:** `2026-11-11-tam-tarama-tr.md` (özgün adı "Rigor - Tam Depo Adversarial Red Team Denetimi ve Mimari
+  Güvence Raporu").
+- **R-FII:** `2026-11-11-tam-tarama-ve-faz-ii.md` (özgün adı "RIGOR — FULL REPOSITORY ADVERSARIAL RED TEAM &amp;"). İçinde iki rapor var: birinci tur
   ("Bağımsız Red Team mimari denetimi") ve "Deep Research Phase II".
-- **Ekler:** `faz_ii_yeni_bulgular.csv`, `onceki_rapor_eksiklik_matrisi.csv`, `izole_karsi_ornekler.csv`,
+- **Ekler** (`data/2026-11-11-faz-ii/` altında): `faz_ii_yeni_bulgular.csv`, `onceki_rapor_eksiklik_matrisi.csv`, `izole_karsi_ornekler.csv`,
   `istatistik_yeniden_denetim.csv`, `iki_asamali_kabul.csv`, `kabul_kalibrasyonu.csv`, `deney_ortami.json`.
 
 Bu bölüm iki raporun tasarımcı tarafından yapılan denetimidir; EGM'nin taze gözlü incelemesi değildir.
@@ -580,7 +584,7 @@ dosyasında çalıştırılmış haliyle var.
 
 ### Soru 1 (kapandı): Sertifikası olan ama tam heyetten geçmemiş sonuç ne alır?
 
-Kaynak: sahip `docs/research/Deep Research/Soru1-2` dosyasını cevap olarak gösterdi.
+Kaynak: sahip `docs/research/external-reports/2026-11-10-soru1-etiketler-2.md` (kısa adı `Soru1-2`) dosyasını cevap olarak gösterdi.
 
 | Etiket | Anlamı |
 | --- | --- |
@@ -647,7 +651,8 @@ Kaynak: sahip `docs/research/Deep Research/Soru1-2` dosyasını cevap olarak gö
 - Güçlü model ücretsiz katmanda verilirse katkısı aynı sayılır. Çekince: bekleme uzayabilir.
 - Depoda bir kayıt dosyası olur; Rigor modelin orada olup olmadığına bakar.
 - Önce sahibin elindeki modellerle ilerlenir.
-- Cevap olarak `docs/research/Deep Research/Soru2-1` dosyası ve `rigor_yeterlik_istatistik_hesaplari.csv` gösterildi.
+- Cevap olarak `docs/research/external-reports/2026-11-10-soru2-yeterlik.md` (kısa adı `Soru2-1`) dosyası ve `docs/research/external-reports/data/2026-11-10-soru2-yeterlik-istatistik.csv` (özgün adı
+  `rigor_yeterlik_istatistik_hesaplari.csv`) gösterildi.
 
 #### Karar (gösterilen rapordan)
 
@@ -729,7 +734,7 @@ tasarımcı önerisidir ve sahip onayı bekliyor (Kayıt: S-5, Ö-2-1).
 
 #### Hesap denetimi
 
-`rigor_yeterlik_istatistik_hesaplari.csv` dosyasındaki 34 satırın tamamı yalnızca standart kütüphaneyle yeniden
+`data/2026-11-10-soru2-yeterlik-istatistik.csv` dosyasındaki 34 satırın tamamı yalnızca standart kütüphaneyle yeniden
 hesaplandı (Clopper–Pearson, ikiye bölme). Uyuşmayan satır yok; en büyük fark 2·10⁻¹⁶. Yukarıdaki ek rakamlar (%41,
 %2,7, %91, %5,6, %4,9, %9,5) aynı betikle üretildi.
 
@@ -1134,7 +1139,9 @@ Sahibin makinesindeki istemci, model ve hesap ayrıntıları `docs/private/` alt
 ## Tartılan alternatifler
 
 "Eleyen" sütunu kimin elediğini söyler. Raporlar: `Soru1-1` (birinci ve ikinci aşama raporu), `Soru1-2` (üçüncü ve
-dördüncü aşama), `Soru2-1`. Sahip bu raporları cevap olarak gösterdi; kalem kalem onayı yok (Kayıt: rapor önerileri).
+dördüncü aşama), `Soru2-1`. Dosya adları (`docs/research/external-reports/`): `Soru1-1` =
+`2026-11-10-soru1-etiketler-1.md`, `Soru1-2` = `2026-11-10-soru1-etiketler-2.md`, `Soru2-1` =
+`2026-11-10-soru2-yeterlik.md`. Sahip bu raporları cevap olarak gösterdi; kalem kalem onayı yok (Kayıt: rapor önerileri).
 
 | Alternatif | Soru | Eleyen | Gerekçe | Gerekçe hâlâ geçerli mi |
 | --- | --- | --- | --- | --- |
@@ -1189,12 +1196,25 @@ Bu bölüm bütün kararların tek listesidir. Durum sözlüğü:
 | S-17 | Hedefe yetişmezse sahibin kendi kullanımında en az ihtiyaç duyduğu iş bekler; sahip her şeyin yetişeceğini düşünüyor | 2026-11-10 | Geçerli. Tarama: yetişmiyor (B-6) |
 | S-18 | v1'de yabancı kullanıcının ihtiyacı ile sahibin kendi kullanımı çatışırsa sahibin kullanımı önce gelir | 2026-11-11 | Geçerli. A-1'i kapattı; erteleme sırasının "sahip önce" sürümü uygulanır. S-1 hedef kullanıcı olarak kalır |
 | S-19 | "Takvime gerek yok" | 2026-11-11 | Geçerli. Tasarımcı okuması: takvim ve kontrol noktası yapılmaz (B-6'nın kontrol noktası önerisi düştü; K16'nın "ayrıntılı takvim yapılmaz" kuralı korunur). A-5'e cevap sayılmadı |
+| S-20 | v1'de `PROVEN` kapalı | 2026-11-11 | Geçerli. A-5'i kapattı |
+| S-21 | v1 kabul hesapları: roket R1–R11; bot ve Sentinax için B1 ve B2 | 2026-11-11 | Geçerli. A-13'ü kapattı; finans envanteri F4'te formül formül yazılır |
+| S-22 | Lean (K26) v1'den ertelenir | 2026-11-11 | Geçerli. A-12'yi kapattı; F12 |
+| S-23 | v1'de doğrudan matematik (katı ayrıştırıcı) ve kurucu API; doğal dil yolu v1'den sonraki ilk faz | 2026-11-11 | Geçerli. A-11'i kapattı (PDF/DOCX v1'de yok; F9) |
+| S-24 | "Bilmiyorum": çöz; etiket yalnızca çıkarılan denklemi kapsar; kutu "tanımı kullanıcı onaylamadı" yazar; eksik değerde asla geçerli değil | 2026-11-11 | Geçerli. A-2'yi kapattı |
+| S-25 | Başsız istemci v1'de kapalı; sonra sağlayıcı başına açma bayrağı | 2026-11-11 | Geçerli. A-3'ü kapattı; F6 |
+| S-26 | Aynı hesaptaki tam kabuk erişimli ajana karşı garanti verilmez; README ve raporda açık yazılır | 2026-11-11 | Geçerli. A-14'ü kapattı |
+| S-27 | Platform: macOS ve Linux; Windows sonra | 2026-11-11 | Geçerli. A-8'i kapattı; Windows F14 |
+| S-28 | Kayıttaki bütün öneriler toplu kabul (Ö-2-1 dahil) | 2026-11-11 | Geçerli. İkinci dış taramada düzeltilen maddelerin düzeltilmiş hali kabul edildi; bir sahip kararıyla çelişen öneride sahip kararı geçerli. S-5'in yerine Ö-2-1 |
+| S-29 | Geliştirme araçları varsayılan olarak yerel ve ağsız; model çağıran özellikler açık izinle | 2026-11-11 | Geçerli |
+| S-30 | Depoda yalnızca belgelenmiş, isteğe bağlı araç listesi; proje ayarıyla otomatik eklenti, kanca ya da MCP yok | 2026-11-11 | Geçerli. `.claude/settings.json`'daki eklentilerin çıkarılması ayrıca onay bekliyor (mimari T-10) |
+| S-31 | Red Team incelemeleri yalnızca kritik faz geçişlerinde; inceleme ajanları daha ucuz modelle; birleştirmeyi ana ajan yapar | 2026-11-11 | Geçerli. Kapılar K-1 … K-4 (faz planı §2) |
+| S-32 | Mimari `docs/design/`, faz planı `docs/plans/` altına; eski tasarıma "yerini aldı" notu; commit için ayrıca onay | 2026-11-11 | Yapıldı: `docs/design/2026-11-11-rigor-mimari.md`, `docs/plans/2026-11-11-rigor-faz-plani.md` |
 
 ### Rapor önerileri (kalem kalem onay bekliyor)
 
 | No | Öneri | Kaynak |
 | --- | --- | --- |
-| R-1 | Dört etiket: `PROVEN`, `CERTIFIED`, `CROSS_VALIDATED`, `REFUSED`; `PROVEN` tam süreç etiketi; Faz 1'de `PROVEN` yok; dört alanlı özet kutusu | `docs/research/Deep Research/Soru1-2` |
+| R-1 | Dört etiket: `PROVEN`, `CERTIFIED`, `CROSS_VALIDATED`, `REFUSED`; `PROVEN` tam süreç etiketi; Faz 1'de `PROVEN` yok; dört alanlı özet kutusu | `docs/research/external-reports/2026-11-10-soru1-etiketler-2.md` (kısa adı `Soru1-2`) |
 | R-2 | Üç zorunlu üyenin üçü yeterlikli, en az iki aile, 100 görevlik heyet kabulü | `Soru2-1` |
 | R-3 | Ölçülen nesne yapılandırmadır; kayıt başka yola, ayara ya da profile taşınmaz | `Soru2-1` |
 | R-4 | 300 ölçüm + 100 stres örneği, 50 soruluk pilot; sıfır kritik hata; %80 ve %90 alt sınırları | `Soru2-1` |
@@ -1241,19 +1261,19 @@ Bu bölüm bütün kararların tek listesidir. Durum sözlüğü:
 | No | Soru | Kimin kararı | Neyi engelliyor |
 | --- | --- | --- | --- |
 | A-1 | v1'de çatışırlarsa yabancı mı, sahibin kendi kullanımı mı önce gelir? (B-7) | Sahip | **Kapandı (S-18): sahip önce** |
-| A-2 | "Bilmiyorum" hangi etiketlere izin verir; ajan üzerinden gelirse ne olur; eksik değer sorusunda ne olur? (B-1) | Sahip | `decide_label`, §1.1, K4, Faz 1 görev 9 ve 14 |
-| A-3 | Sağlayıcı koşulları doğrulanana kadar varsayılan formül yolu ne olsun? (B-5) | Sahip | S-13'ün uygulanışı, izin metni, F3a |
+| A-2 | "Bilmiyorum" hangi etiketlere izin verir; ajan üzerinden gelirse ne olur; eksik değer sorusunda ne olur? (B-1) | Sahip | **Kapandı (S-24, 2026-11-11)** |
+| A-3 | Sağlayıcı koşulları doğrulanana kadar varsayılan formül yolu ne olsun? (B-5) | Sahip | **Kapandı (S-25, 2026-11-11)** |
 | A-4 | Toplayıcıdan gelen üye en üst etikete katkı verir mi (A, B, C)? | Sahip (araştırıldı) | F3b; v1'de `PROVEN` yoksa hiçbir şeyi |
-| A-5 | v1'de `PROVEN` olacak mı? (B-7, en küçük v1) | Sahip | Yeterlik sistemi, heyet, kayıt dağıtımı |
+| A-5 | v1'de `PROVEN` olacak mı? (B-7, en küçük v1) | Sahip | **Kapandı (S-20, 2026-11-11)** |
 | A-6 | İlk ölçülecek görev profili | Sahip | F3b |
 | A-7 | Kayıtların sürümden bağımsız güncellenme yolu (M-17) | Tasarımcı | Kayıt dağıtımı |
-| A-8 | Desteklenen platformlar; Windows (M-7) | Sahip | Onay ve izin kanalı, CI |
+| A-8 | Desteklenen platformlar; Windows (M-7) | Sahip | **Kapandı (S-27, 2026-11-11)** |
 | A-9 | DeepSeek Harness'in yeri (S-6) | Sahip | Hiçbir şeyi (opsiyonel istemci) |
 | A-10 | "Yanlış" seçeneğinde düzeltmenin biçimi ve tur sınırı (M-7) | Tasarımcı | Faz 1 görev 14 |
-| A-11 | Belge okuyucu (PDF/DOCX) v1'de var mı? (M-11) | Sahip | F3a |
-| A-12 | Lean (K26) v1'den ertelensin mi? (Y-21) | Sahip | Kapsam; K26 değişmeden ertelenmiş sayılmaz |
-| A-13 | v1'in kabul ölçütü olan somut roket ve finans hesapları hangileri? | Sahip | v1 teslimatı |
-| A-14 | Rigor, aynı kullanıcı hesabındaki tam kabuk erişimli ajana karşı ne vaat ediyor? (B-4, Y-4) | Sahip | Güvenlik vaadi, README |
+| A-11 | Belge okuyucu (PDF/DOCX) v1'de var mı? (M-11) | Sahip | **Kapandı (S-23, 2026-11-11)** |
+| A-12 | Lean (K26) v1'den ertelensin mi? (Y-21) | Sahip | **Kapandı (S-22, 2026-11-11)** |
+| A-13 | v1'in kabul ölçütü olan somut roket ve finans hesapları hangileri? | Sahip | **Kapandı (S-21, 2026-11-11)** |
+| A-14 | Rigor, aynı kullanıcı hesabındaki tam kabuk erişimli ajana karşı ne vaat ediyor? (B-4, Y-4) | Sahip | **Kapandı (S-26, 2026-11-11)** |
 
 ### Doğrulanacaklar (birincil kaynakla, tasarıma yazılmadan önce)
 
@@ -1307,9 +1327,12 @@ Diğer belgeler:
 
 ### Sıradaki adımlar
 
-1. Sahip açık noktaları cevaplar (A-1 kapandı; sırada A-5, A-2, A-3, A-13, A-14).
-2. Sahip rapor önerilerini ve tasarımcı önerilerini kalem kalem onaylar ya da reddeder.
-3. Bu belge `egm-draft` ile resmî tasarım taslağına dönüştürülür; taslak yeniden taze gözle incelenir.
+1. Sahip açık noktaları cevaplar. **2026-11-11:** A-1, A-2, A-3, A-5, A-8, A-11, A-12, A-13, A-14 kapandı; açık
+   kalanlar mimari belgenin §9'unda.
+2. Sahip rapor önerilerini ve tasarımcı önerilerini kalem kalem onaylar ya da reddeder. **2026-11-11:** toplu kabul
+   (S-28).
+3. Bu belge resmî tasarım taslağına dönüştürülür; taslak yeniden taze gözle incelenir. **2026-11-11:** mimari belge
+   ve faz planı yazıldı; inceleme sonucu mimari belgenin §11'inde.
 4. Tek revizyonda tasarım belgesi, yol haritası, Faz 1 planı ve README güncellenir.
 
 Birleştirme koşulu: 1. ve 2. adım bitmiş olmalı. Açık kalan her nokta tasarıma "açık" diye ve fail-closed varsayılanla

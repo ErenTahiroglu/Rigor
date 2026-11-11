@@ -1,7 +1,7 @@
 # Rigor — Araştırma Notları (2026-11-07)
 
-Tasarım belgesinin ([`../superpowers/specs/2026-11-07-rigor-design.md`](../superpowers/specs/2026-11-07-rigor-design.md))
-dayandığı bulgular. Önceki oturumun envanteri için [`../../Handoff`](../../Handoff) §2'ye bakın; burada yalnızca
+Tasarım belgesinin ([`../design/2026-11-07-rigor-design.md`](../design/2026-11-07-rigor-design.md))
+dayandığı bulgular. Önceki oturumun envanteri için [`../history/2026-11-07-ilk-devir.md`](../history/2026-11-07-ilk-devir.md) §2'ye bakın; burada yalnızca
 bu oturumda doğrulanan ya da yeni bulunanlar var.
 
 > Not: Bulguların bir kısmı yalnızca makale özetlerinden (abstract) veya üçüncü taraf sayfalardan okunmuştur;

@@ -1,5 +1,10 @@
 # Faz 1 — Çekirdek Implementation Plan
 
+> **Eskidi (2026-11-11) — bu planla kod yazılmaz.** Plan eski üç etiketli sözleşmeyi kuruyor (karar kaydı B-8). Yeni
+> mimari ([`../design/2026-11-11-rigor-mimari.md`](../design/2026-11-11-rigor-mimari.md)) ve faz planına
+> ([`2026-11-11-rigor-faz-plani.md`](2026-11-11-rigor-faz-plani.md)) göre F0'da yeniden yazılacak. Yeni planda F1
+> (çekirdek güven tabanı) ve F2 (arayüzler ve onay) bu planın kapsamını ikiye böler.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Elle kurulan (veya ajanın gönderdiği) tipli bir IR'ı birim, yapı ve alan kapılarından geçirip, kullanıcı onayıyla, iki bağımsız yoldan çözen, sertifikalandıran ve etiketli kanıt raporu üreten alandan bağımsız çekirdeği; ince bir MCP kabuğunu ve `rigor doctor`'ı kurmak.
@@ -8,7 +13,7 @@
 
 **Tech Stack:** Python ≥3.12 (geliştirme 3.15), uv, pydantic 2.14, sympy 1.14, z3-solver 5.3.3, python-flint 0.9 (abi3), pint 0.26 (`non_int_type=Fraction`), networkx 3.7, mpmath 1.4, hypothesis 6.170, mcp 2.3 (`MCPServer`), pytest.
 
-**Spec:** [`docs/superpowers/specs/2026-11-07-rigor-design.md`](../specs/2026-11-07-rigor-design.md) — Faz 1 = §10 madde 1. Yol haritası: [`2026-11-07-rigor-yol-haritasi.md`](2026-11-07-rigor-yol-haritasi.md).
+**Spec:** [`docs/design/2026-11-07-rigor-design.md`](../design/2026-11-07-rigor-design.md) — Faz 1 = §10 madde 1. Yol haritası: [`2026-11-07-rigor-yol-haritasi.md`](2026-11-07-rigor-yol-haritasi.md).
 
 ## Global Constraints
 

@@ -1,7 +1,11 @@
 # Rigor — Mimari ve Faz Yol Haritası
 
-**Spec:** [`docs/superpowers/specs/2026-11-07-rigor-design.md`](../specs/2026-11-07-rigor-design.md) (onaylı, K1–K26)
-**Araştırma:** [`docs/research/2026-11-07-arastirma-notlari.md`](../../research/2026-11-07-arastirma-notlari.md) (§16: plan öncesi doğrulama)
+> **Yerini aldı (2026-11-11):** Bu yol haritasının yerini [`2026-11-11-rigor-faz-plani.md`](2026-11-11-rigor-faz-plani.md)
+> aldı; mimari için [`../design/2026-11-11-rigor-mimari.md`](../design/2026-11-11-rigor-mimari.md). Eski ve yeni fazların
+> eşlemesi yeni planın §6'sında. Bu belge yalnızca geçmiş kaydı olarak duruyor.
+
+**Spec:** [`docs/design/2026-11-07-rigor-design.md`](../design/2026-11-07-rigor-design.md) (onaylı, K1–K26)
+**Araştırma:** [`docs/research/2026-11-07-arastirma-notlari.md`](../research/2026-11-07-arastirma-notlari.md) (§16: plan öncesi doğrulama)
 
 Bu belge mimariyi ve fazları sabitler. Spec birbirinden bağımsız test edilebilen birçok alt sistem içerdiği için
 **her fazın ayrıntılı TDD planı ayrı bir belgedir** ve o faz başlarken yazılır. Faz 1 planı:

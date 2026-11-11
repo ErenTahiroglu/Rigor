@@ -1,11 +1,17 @@
 # Rigor — Tasarım Belgesi
 
+> **Yerini aldı (2026-11-11):** Bu belgenin yerini [`2026-11-11-rigor-mimari.md`](2026-11-11-rigor-mimari.md) aldı.
+> Çakışmada yeni belge geçerlidir. Bu belgenin yeni belgede ele alınmayan ayrıntıları (ör. §5.3 roket envanteri,
+> §6.10 OpenRocket kuralları, §8.1 Python sürümü incelemesi) çelişmedikçe geçerli kalır ve yeni belgede "eski §…"
+> diye anılır. Aşağıdaki "değiştirilemez" okuma kuralı yerine yeni belgedeki kural geçerlidir: daha yeni tarihli bir
+> sahip kararı eskisinin yerini alır.
+
 | | |
 |---|---|
 | Tarih | 2026-11-07 |
 | Durum | ONAYLANDI (2026-11-07) — K24–K26 ile genişletildi |
 | Sahip | Eren Tahiroğlu |
-| Kaynaklar | [`../../../Handoff`](../../../Handoff) (önceki oturum, Bölüm 1 bağlayıcı), [`../../research/2026-11-07-arastirma-notlari.md`](../../research/2026-11-07-arastirma-notlari.md) |
+| Kaynaklar | [`../history/2026-11-07-ilk-devir.md`](../history/2026-11-07-ilk-devir.md) (önceki oturum, Bölüm 1 bağlayıcı), [`../research/2026-11-07-arastirma-notlari.md`](../research/2026-11-07-arastirma-notlari.md) |
 
 > **Okuma kuralı:** "**Sahip kararı**" ile işaretli maddeler sahibin açıkça söylediği şeylerdir ve değiştirilemez.
 > "**Tasarımcı kararı**" ile işaretli maddeler bu belgeyi yazanın verdiği, sahibin henüz ayrıca onaylamadığı kararlardır;

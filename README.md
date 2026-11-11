@@ -3,11 +3,13 @@
 **AI'a yaptırdığın matematikten emin olmak için bir doğrulama motoru.**
 Python kütüphanesi + MCP sunucusu (Claude Code ve diğer kodlama ajanları için).
 
-> **Durum:** Tasarım aşaması. Henüz kod yok; mimari ve kararlar [tasarım belgesinde](docs/superpowers/specs/2026-11-07-rigor-design.md).
+> **Durum:** Tasarım aşaması; henüz kod yok. Güncel mimari ve v1 sınırları
+> [mimari belgesinde](docs/design/2026-11-11-rigor-mimari.md), fazlar [faz planında](docs/plans/2026-11-11-rigor-faz-plani.md).
 >
-> **Revizyon sürüyor (2026-11-10):** Etiketler, hakem heyeti ve model erişimi yeniden ele alınıyor. Alınan kararlar ve
-> açık noktalar [`concepts_brief.md`](concepts_brief.md) dosyasında; tasarım belgesine henüz işlenmedi. Aşağıdaki
-> etiket tablosu ve model erişimi anlatımı önceki sözleşmeyi yansıtır.
+> **Bu README'nin aşağısı eski sözleşmeyi gösterir (2026-11-07)** ve v1 sürümünde yeniden yazılacak. Önemli farklar:
+> v1'de `KANITLANDI` etiketi kapalı; etiketler `MATEMATİKSEL SERTİFİKA DOĞRULANDI`, `ÇAPRAZ DOĞRULANDI` ve
+> `REDDEDİLDİ`. Planlanan v1 doğal dil, Lean 4 ve model çağrısı içermez; hiçbir ağ çağrısı yapmaz; macOS ve Linux içindir.
+> Aynı kullanıcı hesabında kabuk erişimi olan bir ajana karşı garanti verilmez.
 
 ---
 
@@ -122,15 +124,28 @@ MCP üzerinden: `rigor_solve`, `rigor_answer`, `rigor_confirm`, `rigor_report`, 
 
 ## Belgeler
 
+Belgeler amaçlarına göre ayrı klasörlerde durur:
+
+| Klasör | Ne var |
+|---|---|
+| `docs/design/` | Tasarım belgeleri (mimari, bağlayıcı kararlar, hedefler, anti-hedefler) |
+| `docs/plans/` | Yol haritası ve faz planları |
+| `docs/decisions/` | Karar kaydı: sahip kararları, öneriler, açık noktalar, Red Team bulguları |
+| `docs/research/` | Araştırma notları, kanıt betikleri (`evidence/`) ve dış araçla üretilmiş raporlar (`external-reports/`) |
+| `docs/history/` | Geçmiş belgeler (ilk devir) |
+
 | Belge | İçerik |
 |---|---|
-| [Tasarım belgesi](docs/superpowers/specs/2026-11-07-rigor-design.md) | Mimari, bağlayıcı kararlar, hedefler ve anti-hedefler |
-| [Yol haritası](docs/superpowers/plans/2026-11-07-rigor-yol-haritasi.md) | Paket mimarisi, fazlar (F1–F9), çıkış ölçütleri |
-| [Faz 1 planı](docs/superpowers/plans/2026-11-07-faz-1-cekirdek.md) | Çekirdeğin adım adım TDD uygulama planı |
+| [Mimari ve v1 sınırları](docs/design/2026-11-11-rigor-mimari.md) | Güncel mimari, etiketler, araç zinciri, Red Team kararları, v1 sınırları |
+| [Faz planı](docs/plans/2026-11-11-rigor-faz-plani.md) | Takvimsiz fazlar (F0–F14), kalite kapıları, kabul ölçütleri |
+| [Tasarım belgesi (eski)](docs/design/2026-11-07-rigor-design.md) | İlk tasarım; yerini mimari belgesi aldı, atıf yapılan bölümleri geçerli |
+| [Yol haritası (eski)](docs/plans/2026-11-07-rigor-yol-haritasi.md) | Yerini faz planı aldı |
+| [Faz 1 planı (eskidi)](docs/plans/2026-11-07-faz-1-cekirdek.md) | F0'da yeniden yazılacak; bu haliyle kod yazılmaz |
 | [Araştırma notları](docs/research/2026-11-07-arastirma-notlari.md) | Kaynaklı bulgular, araç durumu, sürümler, Red Team incelemeleri |
-| [Karar özeti (taslak)](concepts_brief.md) | Etiket, yeterlik ve heyet revizyonu: alınan kararlar, Red Team bulguları, açık noktalar |
-| [Ham araştırma raporları](docs/research/Deep%20Research/) | Dış araçla üretilmiş raporlar ve hesap eki. Doğrulanmış sonuç değildir; denetimi karar özetindedir |
-| [Handoff](Handoff) | Projenin başlangıç devri |
+| [Araç uygunluk raporu](docs/research/2026-11-11-atm-arac-uygunluk-raporu.md) | AI-Toolchain-Manager kataloğundaki 23 aracın Rigor'a uygunluğu |
+| [Karar kaydı](docs/decisions/2026-11-10-karar-kaydi.md) | Bütün sahip kararları (S-1 … S-32), Red Team bulguları, öneriler, açık noktalar |
+| [Dış araştırma raporları](docs/research/external-reports/) | Dış araçla üretilmiş raporlar ve hesap ekleri. Doğrulanmış sonuç değildir; denetimi karar kaydındadır |
+| [İlk devir](docs/history/2026-11-07-ilk-devir.md) | Projenin başlangıç devri (Handoff) |
 
 ## Lisans
 
