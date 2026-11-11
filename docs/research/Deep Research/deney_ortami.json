@@ -1,0 +1,9 @@
+{
+  "python": "3.12.8",
+  "sympy": "1.14.0",
+  "scipy": "1.13.1",
+  "pydantic": "2.11.4",
+  "mpmath": "1.3.0",
+  "rigor_tests_executed": false,
+  "csv_source": "GitHub tool response manually transcribed; original blob not locally hash-verified"
+}

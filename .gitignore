@@ -16,9 +16,15 @@ build/
 
 # Yarışma şartnameleri, takım verileri ve özel notlar repoya girmez (tasarım §9).
 # Ayrıca burada durur: yerel hesap/istemci envanteri, ham araştırma dökümleri,
-# yeterlik setinin gizli payı.
+# yeterlik setinin gizli payı, telif hakkı başkasına ait makale PDF'leri.
 private/
 docs/private/
+
+# Makale ve şartname PDF'leri herkese açık depoya girmez; kaynakça bağlantıyla verilir.
+# (Depoya kasıtlı eklenecek bir PDF olursa: git add -f)
+*.pdf
+*.docx
+*.xlsx
 
 # API anahtarları ve sırlar (K14: anahtarlar ortam değişkeninden okunur; dosyaya yazılırsa repoya girmesin)
 .env

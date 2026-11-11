@@ -1,0 +1,4 @@
+plan,n_first,n_second,pass_at_p_0_01
+single stage n=300,300,0,0.04904089407128572
+two stage n=300 each,300,300,0.05632880101465259
+two stage recalibrated identical lengths,311,311,0.0499646119597041

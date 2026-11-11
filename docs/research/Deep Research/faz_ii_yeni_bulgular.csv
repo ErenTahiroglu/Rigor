@@ -1,0 +1,9 @@
+ID,Severity,Evidence,Progress,Location,Finding,Acceptance direction
+P2-01,BLOCKER,VERIFIED,NEW,Plan Görev 11,Yerel kök uyuşması tamlık veya teklik kanıtı değildir,Witness/completeness/uniqueness ayır; desteklenmeyende UNKNOWN
+P2-02,BLOCKER,VERIFIED,NEW,"Plan Görev 3,8,13",mod ve işlem semantiği arka uçlar arasında farklı,Sürümlü operator semantiği; negatif bölen testleri
+P2-03,BLOCKER,SUPPORTED,NEW,"Plan Görev 7,12,13; tasarım 6.3",Hedef ifadelerinin tanımlılık yükümlülükleri açık değil,Bütün AST köklerinde definedness; sadeleştirmeden önce yükümlülük çıkar
+P2-04,BLOCKER,SUPPORTED,NEW,Plan Görev 18,Formun gönderilmesi ile onay boolean değeri ayrılmamış,accept+onay true açık kuralı; decline/cancel terminal
+P2-05,HIGH,VERIFIED,NEW,Plan Görev 18; tasarım 7.2,MCP protokol çağı ve tekrar yürütme sözleşmesi eksik,Negotiated-version adaptörü; MRTR; durable single-use/idempotency
+P2-06,HIGH,VERIFIED,NEW,Tasarım 6.6,ODE/PDE yerine koyma çözümün tekliğini kanıtlamaz,Valid trajectory ve unique solution iddialarını ayır
+P2-07,HIGH,VERIFIED,NEW,Certificate checker seçimi; cvc5 dokümanı,Proof object üretimi bütün adımların denetlendiği anlamına gelmez,Hole/unknown/unsupported adımda kapalı başarısızlık
+P2-08,MEDIUM,VERIFIED,NEW,Tasarım 10 ile yol haritası 2,Finans ve optimizasyon faz sırası farklı,Tek bağımlılık grafiği ve açık sahip önceliği

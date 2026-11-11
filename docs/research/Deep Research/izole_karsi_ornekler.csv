@@ -1,0 +1,14 @@
+experiment,observed,interpretation
+sin_solve,"[{x: 0}, {x: pi}]","solve returns only listed candidates, not a completeness certificate"
+sin_solveset,"Union(ImageSet(Lambda(_n, 2*_n*pi), Integers), ImageSet(Lambda(_n, 2*_n*pi + pi), Integers))",set representation carries infinite family
+sin_missing_root,0,2*pi is an additional root beyond solve output
+decimal_intermediate_rounding,0.99,per-operation rounding differs from exact algebra
+exact_then_round,1,one final rounding is not the same execution trace
+negative_mod_python_sympy_decimal,"(-2, -2, Decimal('1'))",three backend conventions need explicit operator semantics
+euclidean_mod_spec,1,SMT-LIB nonnegative remainder for divisor -3
+identity_domain_erasure,1,simplification does not retain original x!=0 obligation
+zero_equality_reject_rule,"([], Reals)","zero listed candidates may mean all reals, not no solution"
+negative_power_undefined,zoo,negative powers require nonzero base
+frozen_nested_mutation,"('{""args"":[1,2]}', '{""args"":[1,2,3]}')",frozen does not freeze nested lists
+multi_start_sin_roots,"['0.0', '0.0', '0.0']",agreement of local starts does not establish global uniqueness
+other_sin_root,1.142e-61,another exact mathematical root exists at pi
